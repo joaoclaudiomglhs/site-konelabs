@@ -1293,7 +1293,7 @@ a {
 
 .header-100svh {
   max-height: 60rem;
-  min-height: 92svh;
+  min-height: 40svh;
   align-items: center;
   margin-bottom: 5svh;
   display: flex;
@@ -1667,6 +1667,13 @@ a {
   font-weight: 600;
   text-decoration: none;
   transition: color .2s;
+}
+.destac {
+  color: #61d180;
+  text-align: center;
+  font-size: 5rem;
+  font-weight: 600;
+
 }
 
 .footer_link:hover, .footer_link.green {
@@ -3150,6 +3157,13 @@ a {
     grid-template-columns: 1fr;
     grid-auto-flow: row;
     justify-items: center;
+  }
+  .destac {
+    color: #61d180;
+    text-align: center;
+    font-size: 4rem;
+    font-weight: 600;
+  
   }
 
   .footer_link {
