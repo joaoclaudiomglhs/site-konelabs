@@ -1116,15 +1116,9 @@ a {
   background-color: var(--black);
   border-style: none;
   align-items: center;
-  padding-top: .88rem;
+  margin-top: 32px;
   padding-bottom: .88rem;
   display: flex;
-  position: absolute;
-  top: 50%;
-  bottom: auto;
-  left: 50%;
-  right: auto;
-  transform: translate(-50%, -50%);
 }
 
 .button.is-portfolio.soon {
@@ -2477,6 +2471,46 @@ a {
   color: var(--light-green);
 }
 
+.portf-lio-kone {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  grid-template-rows: auto;
+  margin-top: 2rem;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  padding-left: 24px;
+}
+
+.portf-lio-kone.command-center {
+  background-color: #0d53a5;
+  background-image: url('../images/Union.png');
+  background-position: 0%;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+}
+
+.portf-lio-kone.ccr {
+  background-color: #11151e;
+  background-image: radial-gradient(circle at 70%, #2d354a, #03000a);
+  grid-template-columns: .5fr 1fr;
+  align-items: center;
+}
+
+.portf-lio-kone._63, .portf-lio-kone._63-t {
+  background-color: #125d61;
+}
+
+.info-port {
+  width: 100%;
+  text-align: left;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+}
+
 @media screen and (max-width: 991px) {
   p {
     font-size: 1rem;
@@ -2920,6 +2954,10 @@ a {
     font-size: 1.5rem;
   }
 
+  .text-size-medium {
+    text-align: left;
+  }
+
   .text-size-medium.text-style-allcaps {
     text-align: center;
   }
@@ -3026,6 +3064,10 @@ a {
   .padding-section-large {
     padding-top: 4rem;
     padding-bottom: 4rem;
+  }
+
+  .padding-section-large.is-header {
+    text-align: left;
   }
 
   .margin-bottom {
@@ -3263,8 +3305,23 @@ a {
     grid-template-columns: 1fr;
   }
 
+  .navbar_logo-image-wrapper, .heading-3 {
+    text-align: left;
+  }
+
   .heading-4 {
     text-align: center;
+  }
+
+  .portf-lio-kone {
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr;
+    padding-left: 0;
+  }
+
+  .portf-lio-kone.command-center, .portf-lio-kone._63-t {
+    grid-template-rows: auto auto;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -3503,7 +3560,7 @@ a {
   }
 }
 
-#w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a301-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a305-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a30b-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a309-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a307-5906330f {
+#w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a301-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a307-5906330f, #w-node-_31b42650-7653-34da-267e-dcd3b9a34ead-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a30b-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a309-5906330f, #w-node-bb4d8235-3651-d3b7-6328-5bd7cb90a305-5906330f {
   justify-self: center;
 }
 
