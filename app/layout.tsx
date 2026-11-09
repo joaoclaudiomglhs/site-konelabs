@@ -35,7 +35,6 @@ export const metadata: Metadata = {
     description: hero.apoio,
     images: [ogImagem.url],
   },
-  robots: { index: true, follow: true },
   formatDetection: { telephone: false },
 };
 
