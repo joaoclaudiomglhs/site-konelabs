@@ -62,12 +62,9 @@ export function Hero() {
       <RevealGroup className="container">
         <RevealItem>
           <h1 className="hero-title" id="hero-title">
-            {hero.titulo.split(hero.destaque).map((parte, i, partes) => (
-              <span key={i}>
-                {parte}
-                {i < partes.length - 1 && <em>{hero.destaque}</em>}
-              </span>
-            ))}
+            {hero.titulo
+              .split(new RegExp(`(${hero.destaques.join("|")})`))
+              .map((parte, i) => (hero.destaques.includes(parte) ? <em key={i}>{parte}</em> : <span key={i}>{parte}</span>))}
           </h1>
         </RevealItem>
         <RevealItem className="hero-bottom">
