@@ -384,7 +384,7 @@ button {
 
 .hero-bottom {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   align-items: end;
   gap: 32px;
   margin-top: clamp(40px, 6vw, 72px);

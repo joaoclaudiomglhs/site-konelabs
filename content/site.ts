@@ -21,7 +21,6 @@ export const hero = {
   titulo: "Sites e produtos digitais estratégicos para marcas que lideram o seu nicho",
   apoio:
     "Criamos sites e produtos que posicionam a marca, conquistam quem visita e transformam visitantes em clientes.",
-  cta: "Vamos conversar",
   origem: "Do Brasil para o mundo",
   desde: "Desde 2018",
 };

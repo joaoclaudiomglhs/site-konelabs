@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  ArrowRight,
   ArrowUpRight,
   Code,
   Compass,
@@ -80,10 +79,6 @@ export function Hero() {
               </span>
             </p>
           </div>
-          <a className="btn btn-primary" href="/#contato">
-            {hero.cta}
-            <ArrowRight className="btn-icon icon-right" size={18} aria-hidden="true" />
-          </a>
         </RevealItem>
       </RevealGroup>
     </section>
