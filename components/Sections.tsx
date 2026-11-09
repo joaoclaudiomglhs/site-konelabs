@@ -249,7 +249,7 @@ export function Contato() {
             <p className="contact-label">WhatsApp</p>
             <a className="btn btn-primary" href={contato.whatsapp} target="_blank" rel="noreferrer" style={{ width: "fit-content" }}>
               <WhatsAppIcon size={18} />
-              Iniciar conversa
+              Falar com João Cláudio
             </a>
           </RevealItem>
           <RevealItem className="contact-item">

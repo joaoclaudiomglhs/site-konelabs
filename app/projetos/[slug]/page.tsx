@@ -6,9 +6,22 @@ import CaseMedia from "@/components/CaseMedia";
 import Pending from "@/components/Pending";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import { Contato } from "@/components/Sections";
-import { projetos } from "@/content/site";
+import JsonLd from "@/components/JsonLd";
+import { projetos, type Projeto } from "@/content/site";
+import { siteNome, siteUrl } from "@/lib/site";
 
 type Params = { params: Promise<{ slug: string }> };
+
+// Apenas os projetos cadastrados existem. Qualquer outro endereco cai na pagina 404.
+export const dynamicParams = false;
+
+// Enquanto a descricao estiver pendente, o resumo para buscadores usa so dados ja confirmados do projeto.
+const minuscula = (t: string) => t.charAt(0).toLowerCase() + t.slice(1);
+
+function resumo(p: Projeto) {
+  if (!p.descricao.toLowerCase().includes("pendente")) return p.descricao;
+  return `${p.nome}: projeto da Konelabs no setor ${p.setor.toLowerCase()}, ${minuscula(p.categoria)}, ${p.ano}.`;
+}
 
 export function generateStaticParams() {
   return projetos.map((p) => ({ slug: p.slug }));
@@ -18,7 +31,30 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const p = projetos.find((x) => x.slug === slug);
   if (!p) return {};
-  return { title: p.nome, description: p.descricao, openGraph: { images: [p.capa] } };
+  const titulo = `${p.nome}, ${minuscula(p.categoria)}`;
+  const caminho = `/projetos/${p.slug}`;
+  const imagem = { url: p.capa, alt: `Capa do projeto ${p.nome}` };
+  return {
+    title: titulo,
+    description: resumo(p),
+    alternates: { canonical: caminho },
+    // O Open Graph da pagina substitui o do layout por inteiro, entao todos os campos sao repetidos aqui.
+    openGraph: {
+      type: "article",
+      locale: "pt_BR",
+      siteName: siteNome,
+      url: caminho,
+      title: `${titulo} | Konelabs`,
+      description: resumo(p),
+      images: [imagem],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${titulo} | Konelabs`,
+      description: resumo(p),
+      images: [p.capa],
+    },
+  };
 }
 
 function CaseSection({ id, tag, titulo, children }: { id: string; tag: string; titulo: string; children: React.ReactNode }) {
@@ -46,8 +82,34 @@ export default async function ProjetoPage({ params }: Params) {
   const anterior = projetos[(index - 1 + projetos.length) % projetos.length];
   const proximo = projetos[(index + 1) % projetos.length];
 
+  const dados = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CreativeWork",
+        name: p.nome,
+        description: resumo(p),
+        url: `${siteUrl}/projetos/${p.slug}`,
+        image: `${siteUrl}${p.capa}`,
+        dateCreated: String(p.ano),
+        genre: p.categoria,
+        about: p.setor,
+        creator: { "@id": `${siteUrl}/#organizacao`, "@type": "Organization", name: siteNome },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Início", item: `${siteUrl}/` },
+          { "@type": "ListItem", position: 2, name: "Projetos", item: `${siteUrl}/#projetos` },
+          { "@type": "ListItem", position: 3, name: p.nome, item: `${siteUrl}/projetos/${p.slug}` },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      <JsonLd data={dados} />
       <article className="project-hero">
         <div className="container">
           <RevealGroup>
