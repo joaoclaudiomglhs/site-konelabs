@@ -88,6 +88,15 @@ export type Projeto = {
   setor: string;
   url: string;
   capa: string;
+  // Campos do case completo. Onde ainda nao ha informacao, o campo fica vazio
+  // e a pagina mostra o bloco sinalizado como pendente.
+  video?: string;
+  entregas: string[];
+  ferramentas: string[];
+  desafio?: string;
+  solucao?: string;
+  resultados?: { valor: string; rotulo: string }[];
+  depoimento?: { texto: string; autor: string; cargo: string };
 };
 
 // Descricoes traduzidas do site atual (em ingles).
@@ -102,6 +111,8 @@ export const projetos: Projeto[] = [
       "Internet por fibra óptica para residências, empresas e provedores, líder no mercado do Norte e Nordeste do Brasil.",
     url: "https://aranetplay.com.br/",
     capa: "/capas/aranet-play.png",
+    entregas: ["Design do site", "Desenvolvimento em Framer"],
+    ferramentas: ["Framer"],
   },
   {
     slug: "grupo-santa",
@@ -113,6 +124,8 @@ export const projetos: Projeto[] = [
       "Um dos maiores grupos privados de saúde do Centro-Oeste, com mais de 10 hospitais e mais de 1 milhão de pacientes atendidos por ano.",
     url: "https://gruposanta.com.br/",
     capa: "/capas/grupo-santa.png",
+    entregas: ["Design do site", "Desenvolvimento em Framer"],
+    ferramentas: ["Framer"],
   },
   {
     slug: "brasimpex",
@@ -125,6 +138,8 @@ export const projetos: Projeto[] = [
     // O site atual aponta para brasimpex.framer.website; a faixa de clientes usa o dominio oficial.
     url: "https://www.brasimpex.com.br/",
     capa: "/capas/brasimpex.png",
+    entregas: ["Design do site", "Desenvolvimento em Framer"],
+    ferramentas: ["Framer"],
   },
   {
     slug: "abramar",
@@ -136,6 +151,9 @@ export const projetos: Projeto[] = [
       "Uma das primeiras associações de manufatura reversa do mundo, que trabalha pelo reconhecimento da cadeia formal de reciclagem de eletrônicos como um segmento econômico próspero e sustentável.",
     url: "https://abramar.org/",
     capa: "/capas/abramar.png",
+    video: "/videos/abramar.mp4",
+    entregas: ["Branding", "Design do site", "Desenvolvimento em Framer"],
+    ferramentas: ["Framer"],
   },
   {
     slug: "invisual",
@@ -147,6 +165,8 @@ export const projetos: Projeto[] = [
       "Health tech focada em gestão de saúde, que leva inovação e eficiência para redes hospitalares privadas no Brasil.",
     url: "https://www.invisual.com.br/",
     capa: "/capas/invisual.png",
+    entregas: ["Design do site", "Desenvolvimento em Framer"],
+    ferramentas: ["Framer"],
   },
   {
     slug: "autoinsp",
@@ -158,6 +178,8 @@ export const projetos: Projeto[] = [
     descricao: "Descrição do projeto pendente.",
     url: "https://autoinsp.framer.website/",
     capa: "/capas/autoinsp.png",
+    entregas: ["Design do site", "Desenvolvimento em Framer"],
+    ferramentas: ["Framer"],
   },
 ];
 

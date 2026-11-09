@@ -82,7 +82,7 @@ export function Hero() {
           </div>
           <a className="btn btn-primary" href="/#contato">
             {hero.cta}
-            <ArrowRight className="btn-icon" size={18} aria-hidden="true" />
+            <ArrowRight className="btn-icon icon-right" size={18} aria-hidden="true" />
           </a>
         </RevealItem>
       </RevealGroup>
@@ -195,7 +195,7 @@ export function Sobre() {
           <SectionHead tag="Sobre" id="sobre-title" titulo={sobre.titulo} apoio={sobre.texto} />
           <RevealGroup className="stats">
             {sobre.numeros.map((n) => (
-              <RevealItem key={n.rotulo}>
+              <RevealItem key={n.rotulo} className="stat card-raised">
                 <p className="stat-value">{n.valor}</p>
                 <p className="stat-label">{n.rotulo}</p>
               </RevealItem>
@@ -262,7 +262,7 @@ export function Contato() {
         </RevealGroup>
 
         <RevealGroup className="contact-grid">
-          <RevealItem className="contact-item">
+          <RevealItem className="contact-item card-raised">
             <WhatsAppIcon className="contact-icon" size={30} />
             <p className="contact-label">WhatsApp</p>
             <a className="btn btn-primary" href={contato.whatsapp} target="_blank" rel="noreferrer" style={{ width: "fit-content" }}>

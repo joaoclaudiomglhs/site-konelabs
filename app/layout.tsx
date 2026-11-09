@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/geist";
+import "@fontsource-variable/sora";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";

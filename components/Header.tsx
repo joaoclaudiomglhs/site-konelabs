@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { nav } from "@/content/site";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  // Nas paginas de projeto, "Projetos" fica marcado como a localizacao atual.
+  const isCurrent = (href: string) => href === "/#projetos" && pathname.startsWith("/projetos");
 
   useEffect(() => {
     if (!open) return;
@@ -27,7 +31,9 @@ export default function Header() {
           <ul>
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href}>{n.label}</a>
+                <a href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined}>
+                  {n.label}
+                </a>
               </li>
             ))}
           </ul>
@@ -36,7 +42,7 @@ export default function Header() {
         <div className="header-actions">
           <a className="btn btn-primary" href="/#contato">
             Vamos conversar
-            <ArrowRight className="btn-icon" size={18} aria-hidden="true" />
+            <ArrowRight className="btn-icon icon-right" size={18} aria-hidden="true" />
           </a>
           <button
             type="button"
