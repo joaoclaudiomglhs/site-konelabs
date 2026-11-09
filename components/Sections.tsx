@@ -1,12 +1,12 @@
 import Link from "next/link";
 import {
+  ArrowRight,
   ArrowUpRight,
   Code,
   Compass,
   Layers,
   Mail,
   MapPin,
-  MessageCircle,
   MonitorSmartphone,
   Phone,
   Plus,
@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import Cover from "@/components/Cover";
-import ClientLogo from "@/components/ClientLogo";
 import CopyEmail from "@/components/CopyEmail";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 import {
   chamadaContato,
   clientes,
@@ -80,9 +80,9 @@ export function Hero() {
               </span>
             </p>
           </div>
-          <a className="btn btn-primary" href={contato.whatsapp} target="_blank" rel="noreferrer">
+          <a className="btn btn-primary" href="/#contato">
             {hero.cta}
-            <ArrowUpRight className="btn-icon" size={18} aria-hidden="true" />
+            <ArrowRight className="btn-icon" size={18} aria-hidden="true" />
           </a>
         </RevealItem>
       </RevealGroup>
@@ -169,10 +169,16 @@ export function Clientes() {
         <SectionHead tag="Clientes" id="clientes-title" titulo="Marcas que confiam no nosso trabalho" />
         <RevealGroup as="ul" className="clients-grid">
           {clientes.map((c) => (
-            <RevealItem as="li" key={c.nome}>
-              <a className="client" href={c.url} target="_blank" rel="noreferrer" aria-label={`${c.nome}, abre o site em nova aba`}>
-                <ClientLogo nome={c.nome} logo={c.logo} />
-              </a>
+            <RevealItem as="li" key={c.nome} className="client">
+              {c.url ? (
+                <a href={c.url} target="_blank" rel="noreferrer" aria-label={`${c.nome}, abre o site em nova aba`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={c.logo} alt="" loading="lazy" />
+                </a>
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={c.logo} alt={c.nome} loading="lazy" />
+              )}
             </RevealItem>
           ))}
         </RevealGroup>
@@ -257,11 +263,11 @@ export function Contato() {
 
         <RevealGroup className="contact-grid">
           <RevealItem className="contact-item">
-            <MessageCircle className="contact-icon" size={32} strokeWidth={1.5} aria-hidden="true" />
+            <WhatsAppIcon className="contact-icon" size={30} />
             <p className="contact-label">WhatsApp</p>
             <a className="btn btn-primary" href={contato.whatsapp} target="_blank" rel="noreferrer" style={{ width: "fit-content" }}>
+              <WhatsAppIcon size={18} />
               Iniciar conversa
-              <ArrowUpRight className="btn-icon" size={18} aria-hidden="true" />
             </a>
           </RevealItem>
           <RevealItem className="contact-item">

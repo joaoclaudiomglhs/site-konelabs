@@ -161,15 +161,22 @@ export const projetos: Projeto[] = [
   },
 ];
 
-// Logos: coloque os arquivos em public/clientes/<arquivo>. Enquanto faltar o arquivo, o nome aparece em texto.
-export const clientes = [
-  { nome: "Grupo Santa", url: "https://ccr.gruposanta.com.br/", logo: "/clientes/grupo-santa.svg" },
-  { nome: "Gaia Green Tech", url: "https://gaiagreentech.com/", logo: "/clientes/gaia-green-tech.svg" },
-  { nome: "IBSB", url: "https://ibsb.framer.website/", logo: "/clientes/ibsb.svg" },
-  { nome: "Aranet Play", url: "https://aranetplay.com.br/", logo: "/clientes/aranet-play.svg" },
-  { nome: "Brasimpex", url: "https://www.brasimpex.com.br/", logo: "/clientes/brasimpex.svg" },
-  { nome: "Abramar", url: "https://abramar.org/", logo: "/clientes/abramar.svg" },
-  { nome: "Invisual", url: "https://www.invisual.com.br/", logo: "/clientes/invisual.svg" },
+// Logos dos clientes (pasta "Logo de clientes"). O card mostra somente a imagem.
+// url e opcional: quando existir, a logo vira link para o site do cliente.
+export const clientes: { nome: string; logo: string; url?: string }[] = [
+  { nome: "Grupo Santa", logo: "/clientes/grupo-santa.svg", url: "https://gruposanta.com.br/" },
+  { nome: "Hospital Santa Lúcia", logo: "/clientes/hospital-santa-lucia.svg" },
+  { nome: "Invisual", logo: "/clientes/invisual.svg", url: "https://www.invisual.com.br/" },
+  { nome: "Aranet Play", logo: "/clientes/aranet-play.svg", url: "https://aranetplay.com.br/" },
+  { nome: "63 Telecom", logo: "/clientes/63-telecom.svg" },
+  { nome: "Brasimpex", logo: "/clientes/brasimpex.svg", url: "https://www.brasimpex.com.br/" },
+  { nome: "Grupo BGS", logo: "/clientes/grupo-bgs.png" },
+  { nome: "Abramar", logo: "/clientes/abramar.svg", url: "https://abramar.org/" },
+  { nome: "Gaia Green Tech", logo: "/clientes/gaia.svg", url: "https://gaiagreentech.com/" },
+  { nome: "Simbiótica", logo: "/clientes/simbiotica.svg" },
+  { nome: "Instituto Banda Sinfônica de Brasília", logo: "/clientes/banda-sinfonica.svg" },
+  { nome: "Bauss", logo: "/clientes/bauss.webp" },
+  { nome: "Autoinsp", logo: "/clientes/autoinsp.png" },
 ];
 
 export const sobre = {

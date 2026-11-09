@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Menu, X } from "lucide-react";
-import { contato, nav } from "@/content/site";
+import { ArrowRight, Menu, X } from "lucide-react";
+import { nav } from "@/content/site";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -34,9 +34,9 @@ export default function Header() {
         </nav>
 
         <div className="header-actions">
-          <a className="btn btn-primary" href={contato.whatsapp} target="_blank" rel="noreferrer">
+          <a className="btn btn-primary" href="/#contato">
             Vamos conversar
-            <ArrowUpRight className="btn-icon" size={18} aria-hidden="true" />
+            <ArrowRight className="btn-icon" size={18} aria-hidden="true" />
           </a>
           <button
             type="button"
@@ -62,7 +62,7 @@ export default function Header() {
               </li>
             ))}
             <li>
-              <a href={contato.whatsapp} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+              <a href="/#contato" onClick={() => setOpen(false)}>
                 Vamos conversar
               </a>
             </li>
