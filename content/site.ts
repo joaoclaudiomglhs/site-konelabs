@@ -20,7 +20,7 @@ export const nav = [
 export const hero = {
   // A palavra em "destaque" aparece em verde dentro do titulo.
   titulo: "Estratégia, design e tecnologia que despertam desejo, geram confiança e destravam crescimento.",
-  destaque: "Estratégia",
+  destaque: "crescimento",
   apoio:
     "Criamos sites e produtos que posicionam a marca, conquistam quem visita e transformam visitantes em clientes.",
   origem: "Do Brasil para o mundo",
