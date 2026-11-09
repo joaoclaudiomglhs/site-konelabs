@@ -371,10 +371,10 @@ button {
 }
 
 .hero-title {
-  font-size: clamp(40px, 7.4vw, 96px);
-  line-height: 1.02;
+  font-size: clamp(36px, 6vw, 80px);
+  line-height: 1.04;
   letter-spacing: -0.035em;
-  max-width: 15ch;
+  max-width: 20ch;
 }
 
 .hero-title em {
