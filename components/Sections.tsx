@@ -1,6 +1,4 @@
-import Link from "next/link";
 import {
-  ArrowUpRight,
   Code,
   Compass,
   Layers,
@@ -13,7 +11,7 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
-import Cover from "@/components/Cover";
+import WorkCard from "@/components/WorkCard";
 import CopyEmail from "@/components/CopyEmail";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import {
@@ -137,20 +135,7 @@ export function Projetos() {
         <RevealGroup as="ul" className="works-grid">
           {projetos.map((p) => (
             <RevealItem as="li" key={p.slug}>
-              <Link href={`/projetos/${p.slug}`} className="work-card">
-                <Cover src={p.capa} alt={`Capa do projeto ${p.nome}`} label={p.nome} />
-                <div className="work-info">
-                  <div>
-                    <h3>{p.nome}</h3>
-                    <p className="work-meta">
-                      {p.categoria} · {p.ano}
-                    </p>
-                  </div>
-                  <span className="work-arrow" aria-hidden="true">
-                    <ArrowUpRight size={20} />
-                  </span>
-                </div>
-              </Link>
+              <WorkCard projeto={p} />
             </RevealItem>
           ))}
         </RevealGroup>
