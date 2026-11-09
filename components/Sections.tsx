@@ -1,6 +1,4 @@
-import Link from "next/link";
 import {
-  ArrowUpRight,
   Code,
   Compass,
   Layers,
@@ -13,7 +11,7 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
-import Cover from "@/components/Cover";
+import WorkCard from "@/components/WorkCard";
 import CopyEmail from "@/components/CopyEmail";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import {
@@ -62,12 +60,9 @@ export function Hero() {
       <RevealGroup className="container">
         <RevealItem>
           <h1 className="hero-title" id="hero-title">
-            {hero.titulo.split(hero.destaque).map((parte, i, partes) => (
-              <span key={i}>
-                {parte}
-                {i < partes.length - 1 && <em>{hero.destaque}</em>}
-              </span>
-            ))}
+            {hero.titulo
+              .split(new RegExp(`(${hero.destaques.join("|")})`))
+              .map((parte, i) => (hero.destaques.includes(parte) ? <em key={i}>{parte}</em> : <span key={i}>{parte}</span>))}
           </h1>
         </RevealItem>
         <RevealItem className="hero-bottom">
@@ -140,20 +135,7 @@ export function Projetos() {
         <RevealGroup as="ul" className="works-grid">
           {projetos.map((p) => (
             <RevealItem as="li" key={p.slug}>
-              <Link href={`/projetos/${p.slug}`} className="work-card">
-                <Cover src={p.capa} alt={`Capa do projeto ${p.nome}`} label={p.nome} />
-                <div className="work-info">
-                  <div>
-                    <h3>{p.nome}</h3>
-                    <p className="work-meta">
-                      {p.categoria} · {p.ano}
-                    </p>
-                  </div>
-                  <span className="work-arrow" aria-hidden="true">
-                    <ArrowUpRight size={20} />
-                  </span>
-                </div>
-              </Link>
+              <WorkCard projeto={p} />
             </RevealItem>
           ))}
         </RevealGroup>
@@ -267,7 +249,7 @@ export function Contato() {
             <p className="contact-label">WhatsApp</p>
             <a className="btn btn-primary" href={contato.whatsapp} target="_blank" rel="noreferrer" style={{ width: "fit-content" }}>
               <WhatsAppIcon size={18} />
-              Iniciar conversa
+              Falar com João Cláudio
             </a>
           </RevealItem>
           <RevealItem className="contact-item">

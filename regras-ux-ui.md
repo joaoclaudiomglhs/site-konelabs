@@ -58,6 +58,7 @@ Documento único com todas as regras de interface, experiência e motion para pr
 ## 6. Hover, foco e estados de interação
 
 - Estados de hover nunca usam transformação de escala (scale), nem em foco ou estado pressionado.
+- Exceção: imagens de capa dentro de cards de projeto podem ter um zoom suave (até 4%) no hover e no foco do card. A imagem cresce dentro da própria moldura, que corta o excesso, então o card, o texto e os botões não mudam de tamanho. Animar com mola amortecida, sem oscilar, e desligar com prefers-reduced-motion.
 - Usar deslocamento (translate), cor, fundo, borda ou sombra.
 - Manter estados claros: padrão, hover, foco, ativo, pressionado, desabilitado, carregando, sucesso, erro, vazio e selecionado, quando aplicáveis.
 - Foco sempre visível.
@@ -110,6 +111,8 @@ Documento único com todas as regras de interface, experiência e motion para pr
 - Preferir animar opacidade, transform, cor, fundo e sombra. Evitar animar propriedades de layout como top, left, width e height.
 - Respeitar prefers-reduced-motion.
 - Não adicionar movimento só para impressionar.
+- Implementação no site: Framer Motion (pacote motion, importado de motion/react). Usar LazyMotion com domAnimation e componentes m.* para enviar menos JavaScript. As molas ficam centralizadas em lib/motion.ts (entrada, hover e interface) para manter o mesmo comportamento em toda a interface. MotionConfig com reducedMotion="user" desliga deslocamentos e zoom para quem prefere menos movimento.
+- Entradas animam uma única vez, quando o elemento entra na tela. Elementos que aparecem e somem (como o menu mobile) usam AnimatePresence, com saída mais curta que a entrada.
 
 ## 11. Acessibilidade
 
@@ -150,7 +153,7 @@ Desenvolvimento:
 - O comportamento pedido funciona e o que já existia continua funcionando.
 - Importações e dependências existem e resolvem.
 - Layout coerente, espaçamento consistente, hierarquia clara e responsividade intencional.
-- Estados de interação presentes onde necessário, sem escala no hover.
+- Estados de interação presentes onde necessário, sem escala no hover (exceto o zoom da imagem dentro da capa dos cards de projeto).
 - Teclado, foco visível, nomes acessíveis, rótulos e contraste verificados.
 - Sem emojis, sem travessão longo, sem bordas laterais em cards arredondados, sem verde em grandes áreas.
 - Menu com blur no fundo, noise suave no fundo principal e cards de destaque em cinza mais claro.

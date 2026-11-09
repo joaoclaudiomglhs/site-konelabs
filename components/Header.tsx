@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, m } from "motion/react";
 import { ArrowRight, Menu, X } from "lucide-react";
+import { springUi } from "@/lib/motion";
 import { nav } from "@/content/site";
 
 export default function Header() {
@@ -57,24 +59,35 @@ export default function Header() {
         </div>
       </div>
 
-      {open && (
-        <nav id="menu-mobile" className="mobile-nav container" aria-label="Menu">
-          <ul>
-            {nav.map((n) => (
-              <li key={n.href}>
-                <a href={n.href} onClick={() => setOpen(false)}>
-                  {n.label}
+      {/* O menu mobile entra e sai com opacidade e um leve deslocamento vertical. */}
+      <AnimatePresence>
+        {open && (
+          <m.nav
+            id="menu-mobile"
+            className="mobile-nav container"
+            aria-label="Menu"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8, transition: { duration: 0.15 } }}
+            transition={springUi}
+          >
+            <ul>
+              {nav.map((n) => (
+                <li key={n.href}>
+                  <a href={n.href} onClick={() => setOpen(false)}>
+                    {n.label}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a href="/#contato" onClick={() => setOpen(false)}>
+                  Vamos conversar
                 </a>
               </li>
-            ))}
-            <li>
-              <a href="/#contato" onClick={() => setOpen(false)}>
-                Vamos conversar
-              </a>
-            </li>
-          </ul>
-        </nav>
-      )}
+            </ul>
+          </m.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

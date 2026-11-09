@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/geist";
 import "@fontsource-variable/sora";
 import "./globals.css";
@@ -7,20 +7,40 @@ import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
 import MotionProvider from "@/components/MotionProvider";
 import { hero } from "@/content/site";
+import { ogImagem, siteNome, siteTitulo, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://konelabs.com.br"),
+  metadataBase: new URL(siteUrl),
   title: {
-    default: "Konelabs | Sites e produtos digitais estratégicos",
+    default: siteTitulo,
     template: "%s | Konelabs",
   },
   description: hero.apoio,
+  applicationName: siteNome,
+  alternates: { canonical: "/" },
+  // Favicon e icone da Apple vem de app/favicon.ico, app/icon.svg e app/apple-icon.png (icone oficial da marca).
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    siteName: "Konelabs",
-    images: ["/og-image.png"],
+    url: "/",
+    siteName: siteNome,
+    title: siteTitulo,
+    description: hero.apoio,
+    // Mesma imagem de compartilhamento do site atual em Framer.
+    images: [ogImagem],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitulo,
+    description: hero.apoio,
+    images: [ogImagem.url],
+  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0f0f0f",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
