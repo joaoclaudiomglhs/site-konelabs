@@ -18,7 +18,9 @@ export const nav = [
 ];
 
 export const hero = {
-  titulo: "Sites e produtos digitais estratégicos para marcas que lideram o seu nicho",
+  // A palavra em "destaque" aparece em verde dentro do titulo.
+  titulo: "Sites e produtos digitais com estratégia",
+  destaque: "estratégia",
   apoio:
     "Criamos sites e produtos que posicionam a marca, conquistam quem visita e transformam visitantes em clientes.",
   origem: "Do Brasil para o mundo",

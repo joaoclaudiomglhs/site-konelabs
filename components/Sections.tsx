@@ -62,7 +62,12 @@ export function Hero() {
       <RevealGroup className="container">
         <RevealItem>
           <h1 className="hero-title" id="hero-title">
-            {hero.titulo}
+            {hero.titulo.split(hero.destaque).map((parte, i, partes) => (
+              <span key={i}>
+                {parte}
+                {i < partes.length - 1 && <em>{hero.destaque}</em>}
+              </span>
+            ))}
           </h1>
         </RevealItem>
         <RevealItem className="hero-bottom">
