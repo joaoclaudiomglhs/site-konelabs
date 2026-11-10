@@ -6,9 +6,31 @@ import FormSenha from "@/components/FormSenha";
 import { propostaCaminho, propostaCookie, tokenValido } from "@/lib/proposta";
 import { entrarNaProposta } from "./actions";
 
+// Imagem de compartilhamento propria da proposta: logo da Konelabs com o nome do cliente abaixo.
+// Quem abre o link da proposta sem acesso chega nesta pagina, entao e aqui que os apps leem a previa.
+// Para gerar a imagem de outra proposta: scripts/gerar-og-proposta.mjs.
+const cliente = "NAC Digital e Ebony Logistics";
+const descricao = `Proposta comercial da Konelabs para ${cliente}.`;
+const imagem = { url: "/og/proposta-nac-ebony.png", width: 1200, height: 630, alt: `Konelabs, proposta para ${cliente}` };
+
 export const metadata: Metadata = {
   title: "Página protegida por senha",
   robots: { index: false, follow: false, nocache: true },
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: propostaCaminho,
+    siteName: "Konelabs",
+    title: `Proposta Konelabs para ${cliente}`,
+    description: descricao,
+    images: [imagem],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Proposta Konelabs para ${cliente}`,
+    description: descricao,
+    images: [imagem.url],
+  },
 };
 
 const email = "joao.magalhaes@konelabs.com.br";

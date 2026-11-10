@@ -9,7 +9,12 @@ export const siteUrl = (
 
 export const siteNome = "Konelabs";
 export const siteTitulo = "Konelabs | Sites e produtos digitais estratégicos";
-export const ogImagem = { url: "/og-image.png", width: 1200, height: 630, alt: "Konelabs" };
+export const ogImagem = {
+  url: "/og-konelabs.png",
+  width: 1200,
+  height: 630,
+  alt: "Konelabs: estratégia, design e tecnologia que geram confiança e crescimento",
+};
 
 // Metadados padrao de uma pagina interna: titulo, descricao, canonical, Open Graph e Twitter.
 // O Open Graph da pagina substitui o do layout por inteiro, por isso todos os campos sao repetidos.

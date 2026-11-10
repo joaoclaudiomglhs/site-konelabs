@@ -8,6 +8,7 @@ import {
   propostaCookie,
   tokenValido,
 } from "@/lib/proposta";
+import { comCarregamento } from "@/lib/carregamento";
 
 export const dynamic = "force-dynamic";
 
@@ -19,9 +20,12 @@ export async function GET(request: Request) {
   }
 
   // O HTML aponta para o PDF com caminho relativo; aqui ele passa a apontar para a rota protegida.
-  const html = (await lerArquivoProposta("index.html"))
-    .toString("utf8")
-    .replaceAll('href="proposta-slides.pdf"', `href="${propostaCaminho}/proposta-slides.pdf"`);
+  // A proposta e um HTML grande: a tela de carregamento cobre a pagina ate ela terminar de carregar.
+  const html = comCarregamento(
+    (await lerArquivoProposta("index.html"))
+      .toString("utf8")
+      .replaceAll('href="proposta-slides.pdf"', `href="${propostaCaminho}/proposta-slides.pdf"`),
+  );
 
   return new NextResponse(html, {
     headers: { ...cabecalhosPrivados, "Content-Type": "text/html; charset=utf-8" },

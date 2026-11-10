@@ -1278,6 +1278,12 @@ button {
   color: var(--text);
 }
 
+.footer-cnpj {
+  margin-top: 4px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
 .footer-nav {
   display: flex;
   flex-wrap: wrap;

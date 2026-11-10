@@ -5,9 +5,12 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <p>
-          {rodape.assinatura} · {rodape.lema}
-        </p>
+        <div className="footer-marca">
+          <p>
+            {rodape.assinatura} · {rodape.lema}
+          </p>
+          <p className="footer-cnpj">CNPJ {rodape.cnpj}</p>
+        </div>
         <nav aria-label="Rodapé">
           <ul className="footer-nav">
             {navRodape.map((n) => (

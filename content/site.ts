@@ -21,10 +21,10 @@ export const navRodape = [...nav, { href: "/contato", label: "Contato" }];
 
 export const hero = {
   // As palavras em "destaques" aparecem em verde dentro do titulo.
-  titulo: "Estratégia, design e tecnologia que despertam desejo, geram confiança e destravam crescimento.",
+  titulo: "Estratégia, design e tecnologia que geram confiança e crescimento.",
   destaques: ["Estratégia", "confiança", "crescimento"],
   apoio:
-    "Criamos sites e produtos que posicionam a marca, conquistam quem visita e transformam visitantes em clientes.",
+    "Do primeiro clique ao fechamento, criamos sites, sistemas e produtos digitais que fazem sua marca vender.",
 };
 
 export type Servico = {
@@ -265,4 +265,5 @@ export const chamadaContato = {
 export const rodape = {
   assinatura: "Konelabs® desde 2018",
   lema: "Makers gonna make",
+  cnpj: "31.249.727/0001-30",
 };

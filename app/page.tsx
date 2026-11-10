@@ -1,5 +1,6 @@
 import { Clientes, Contato, Faq, Hero, Projetos, Servicos, Sobre } from "@/components/Sections";
 import JsonLd from "@/components/JsonLd";
+import PageLoader from "@/components/PageLoader";
 import { contato, faq, hero, servicos } from "@/content/site";
 import { siteNome, siteUrl } from "@/lib/site";
 
@@ -43,6 +44,7 @@ const dados = {
 export default function Home() {
   return (
     <>
+      <PageLoader />
       <JsonLd data={dados} />
       <Hero />
       <Servicos />
