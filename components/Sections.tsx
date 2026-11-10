@@ -1,17 +1,25 @@
+import Link from "next/link";
 import {
-  Code,
-  Compass,
-  Layers,
+  ArrowRight,
+  CalendarClock,
+  ChevronDown,
+  Cpu,
+  Factory,
+  HeartPulse,
+  Landmark,
+  LayoutGrid,
   Mail,
   MapPin,
-  MonitorSmartphone,
   Phone,
-  Plus,
-  Users,
-  CalendarClock,
+  Ship,
+  ShoppingBag,
+  type LucideIcon,
 } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import WorkCard from "@/components/WorkCard";
+import ServiceArt from "@/components/ServiceArt";
+import HeroArt from "@/components/HeroArt";
+import FaqList from "@/components/FaqList";
 import CopyEmail from "@/components/CopyEmail";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import {
@@ -23,16 +31,29 @@ import {
   projetos,
   servicos,
   sobre,
-  type Servico,
 } from "@/content/site";
 
-const icones: Record<Servico["icone"], typeof Code> = {
-  "monitor-smartphone": MonitorSmartphone,
-  compass: Compass,
-  layers: Layers,
-  code: Code,
-  users: Users,
+
+// Icones dos setores atendidos, um para cada setor.
+const iconesSetores: Record<string, LucideIcon> = {
+  "heart-pulse": HeartPulse,
+  landmark: Landmark,
+  ship: Ship,
+  "shopping-bag": ShoppingBag,
+  factory: Factory,
+  cpu: Cpu,
 };
+
+// Icones dos numeros da secao Sobre, como nos cards de "Quem somos" da proposta comercial.
+const iconesNumeros: Record<string, LucideIcon> = {
+  "calendar-clock": CalendarClock,
+  "map-pin": MapPin,
+  "layout-grid": LayoutGrid,
+};
+
+// Nas paginas proprias (/servicos, /sobre, /projetos, /contato) o titulo vira H1 no PageHero,
+// e a secao e renderizada com cabecalho={false} para nao repetir o titulo.
+type SecaoProps = { cabecalho?: boolean };
 
 function SectionHead({ tag, id, titulo, apoio }: { tag: string; id: string; titulo: string; apoio?: string }) {
   return (
@@ -57,60 +78,62 @@ function SectionHead({ tag, id, titulo, apoio }: { tag: string; id: string; titu
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <RevealGroup className="container">
-        <RevealItem>
-          <h1 className="hero-title" id="hero-title">
-            {hero.titulo
-              .split(new RegExp(`(${hero.destaques.join("|")})`))
-              .map((parte, i) => (hero.destaques.includes(parte) ? <em key={i}>{parte}</em> : <span key={i}>{parte}</span>))}
-          </h1>
-        </RevealItem>
-        <RevealItem className="hero-bottom">
-          <div>
+      <RevealGroup className="container hero-grid">
+        <div className="hero-text">
+          <RevealItem>
+            <h1 className="hero-title" id="hero-title">
+              {hero.titulo
+                .split(new RegExp(`(${hero.destaques.join("|")})`))
+                .map((parte, i) => (hero.destaques.includes(parte) ? <em key={i}>{parte}</em> : <span key={i}>{parte}</span>))}
+            </h1>
+          </RevealItem>
+          <RevealItem className="hero-bottom">
             <p className="lead">{hero.apoio}</p>
-            <p className="hero-meta">
-              <span>
-                <MapPin size={16} aria-hidden="true" color="var(--accent)" />
-                {hero.origem}
-              </span>
-              <span>
-                <CalendarClock size={16} aria-hidden="true" color="var(--accent)" />
-                {hero.desde}
-              </span>
-            </p>
-          </div>
+            <div className="hero-actions">
+              <Link className="btn btn-primary" href="/projetos">
+                Ver projetos
+                <ArrowRight className="btn-icon icon-right" size={18} aria-hidden="true" />
+              </Link>
+            </div>
+          </RevealItem>
+        </div>
+        <RevealItem className="hero-art-wrap">
+          <HeroArt />
         </RevealItem>
       </RevealGroup>
+      {/* Indicador de rolagem, como na capa da proposta comercial: mouse com ponto que desce e seta que pulsa */}
+      <a className="scroll-cue" href="#servicos" aria-label="Rolar para os serviços">
+        <span className="scroll-mouse" aria-hidden="true">
+          <i />
+        </span>
+        <ChevronDown className="scroll-chev" size={18} aria-hidden="true" />
+      </a>
     </section>
   );
 }
 
-export function Servicos() {
+export const servicosCabecalho = {
+  titulo: "Do primeiro esboço ao produto em evolução",
+  apoio: "Atuamos onde o seu negócio precisa de clareza: no site, no produto, no código ou no time.",
+};
+
+export function Servicos({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="servicos" aria-labelledby="servicos-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="servicos" aria-labelledby={cabecalho ? "servicos-title" : undefined} aria-label={cabecalho ? undefined : "Lista de serviços"}>
       <div className="container">
-        <SectionHead
-          tag="Serviços"
-          id="servicos-title"
-          titulo="Do primeiro esboço ao produto em evolução"
-          apoio="Atuamos onde o seu negócio precisa de clareza: no site, no produto, no código ou no time."
-        />
+        {cabecalho && <SectionHead tag="Serviços" id="servicos-title" titulo={servicosCabecalho.titulo} apoio={servicosCabecalho.apoio} />}
         <RevealGroup as="ul" className="services-list">
           {servicos.map((s) => {
-            const Icon = icones[s.icone];
             return (
               <RevealItem as="li" key={s.id}>
                 <article className="service">
-                  <span className="service-num">{s.id}</span>
-                  <span className="service-icon" aria-hidden="true">
-                    <Icon size={30} strokeWidth={1.5} />
-                  </span>
+                  <ServiceArt tipo={s.icone} />
                   <div>
                     <h3>{s.titulo}</h3>
                     <p>{s.texto}</p>
                   </div>
                   <div className="service-apps-wrap">
-                    <p className="service-apps-label">Aplicações</p>
+                    <p className="service-apps-label label">Aplicações</p>
                     <ul className="service-apps">
                       {s.aplicacoes.map((a) => (
                         <li key={a}>{a}</li>
@@ -127,11 +150,11 @@ export function Servicos() {
   );
 }
 
-export function Projetos() {
+export function Projetos({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="projetos" aria-labelledby="projetos-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="projetos" aria-labelledby={cabecalho ? "projetos-title" : undefined} aria-label={cabecalho ? undefined : "Lista de projetos"}>
       <div className="container">
-        <SectionHead tag="Projetos 2024 a 2026" id="projetos-title" titulo="Trabalhos selecionados" />
+        {cabecalho && <SectionHead tag="Projetos 2024 a 2026" id="projetos-title" titulo="Trabalhos selecionados" />}
         <RevealGroup as="ul" className="works-grid">
           {projetos.map((p) => (
             <RevealItem as="li" key={p.slug}>
@@ -151,16 +174,20 @@ export function Clientes() {
         <SectionHead tag="Clientes" id="clientes-title" titulo="Marcas que confiam no nosso trabalho" />
         <RevealGroup as="ul" className="clients-grid">
           {clientes.map((c) => (
-            <RevealItem as="li" key={c.nome} className="client">
-              {c.url ? (
-                <a href={c.url} target="_blank" rel="noreferrer" aria-label={`${c.nome}, abre o site em nova aba`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={c.logo} alt="" loading="lazy" />
-                </a>
-              ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={c.logo} alt={c.nome} loading="lazy" />
-              )}
+            // O RevealItem cuida so da entrada; o hover fica no .client interno,
+            // para a transicao de CSS nao disputar o transform com o Motion.
+            <RevealItem as="li" key={c.nome}>
+              <div className="client">
+                {c.url ? (
+                  <a href={c.url} target="_blank" rel="noreferrer" aria-label={`${c.nome}, abre o site em nova aba`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={c.logo} alt="" loading="lazy" />
+                  </a>
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.logo} alt={c.nome} loading="lazy" />
+                )}
+              </div>
             </RevealItem>
           ))}
         </RevealGroup>
@@ -169,30 +196,37 @@ export function Clientes() {
   );
 }
 
-export function Sobre() {
+export function Sobre({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="sobre" aria-labelledby="sobre-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="sobre" aria-labelledby={cabecalho ? "sobre-title" : undefined} aria-label={cabecalho ? undefined : "Números e setores"}>
       <div className="container about-grid">
         <div>
-          <SectionHead tag="Sobre" id="sobre-title" titulo={sobre.titulo} apoio={sobre.texto} />
+          {cabecalho && <SectionHead tag="Sobre" id="sobre-title" titulo={sobre.titulo} apoio={sobre.texto} />}
           <RevealGroup className="stats">
-            {sobre.numeros.map((n) => (
-              <RevealItem key={n.rotulo} className="stat card-raised">
-                <p className="stat-value">{n.valor}</p>
-                <p className="stat-label">{n.rotulo}</p>
-              </RevealItem>
-            ))}
+            {sobre.numeros.map((n) => {
+              const Icone = iconesNumeros[n.icone];
+              return (
+                <RevealItem key={n.rotulo} className="stat card-raised">
+                  {Icone && <Icone className="stat-icon" size={32} strokeWidth={1.75} aria-hidden="true" />}
+                  <p className="stat-value">{n.valor}</p>
+                  <p className="stat-label">{n.rotulo}</p>
+                </RevealItem>
+              );
+            })}
           </RevealGroup>
         </div>
         <div>
-          <p className="sectors-label">Setores que atendemos</p>
+          <p className="sectors-label label">Setores que atendemos</p>
           <RevealGroup as="ul" className="sectors">
-            {sobre.setores.map((s, i) => (
-              <RevealItem as="li" key={s}>
-                <span>{s}</span>
-                <span>{String(i + 1).padStart(2, "0")}</span>
-              </RevealItem>
-            ))}
+            {sobre.setores.map((s) => {
+              const Icone = iconesSetores[s.icone];
+              return (
+                <RevealItem as="li" key={s.nome}>
+                  {Icone && <Icone className="sector-icon" size={24} strokeWidth={1.75} aria-hidden="true" />}
+                  <span>{s.nome}</span>
+                </RevealItem>
+              );
+            })}
           </RevealGroup>
         </div>
       </div>
@@ -205,30 +239,17 @@ export function Faq() {
     <section className="section" id="faq" aria-labelledby="faq-title">
       <div className="container faq-grid">
         <SectionHead tag="FAQ" id="faq-title" titulo={faq.titulo} apoio={faq.apoio} />
-        <RevealGroup>
-          {faq.itens.map((f) => (
-            <RevealItem key={f.p}>
-              <details className="faq-item">
-                <summary>
-                  {f.p}
-                  <span className="faq-icon" aria-hidden="true">
-                    <Plus size={20} />
-                  </span>
-                </summary>
-                <p className="faq-answer">{f.r}</p>
-              </details>
-            </RevealItem>
-          ))}
-        </RevealGroup>
+        <FaqList itens={faq.itens} />
       </div>
     </section>
   );
 }
 
-export function Contato() {
+export function Contato({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="contato" aria-labelledby="contato-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="contato" aria-labelledby={cabecalho ? "contato-title" : undefined} aria-label={cabecalho ? undefined : "Canais de contato"}>
       <div className="container">
+        {cabecalho && (
         <RevealGroup className="section-head">
           <RevealItem>
             <p className="tag">Contato</p>
@@ -242,6 +263,7 @@ export function Contato() {
             <p className="lead">{chamadaContato.texto}</p>
           </RevealItem>
         </RevealGroup>
+        )}
 
         <RevealGroup className="contact-grid">
           <RevealItem className="contact-item card-raised">
@@ -253,7 +275,7 @@ export function Contato() {
             </a>
           </RevealItem>
           <RevealItem className="contact-item">
-            <Mail className="contact-icon" size={32} strokeWidth={1.5} aria-hidden="true" />
+            <Mail className="contact-icon" size={32} strokeWidth={1.75} aria-hidden="true" />
             <p className="contact-label">E-mail</p>
             <a className="contact-value" href={`mailto:${contato.email}`}>
               {contato.email}
@@ -261,7 +283,7 @@ export function Contato() {
             <CopyEmail email={contato.email} />
           </RevealItem>
           <RevealItem className="contact-item">
-            <Phone className="contact-icon" size={32} strokeWidth={1.5} aria-hidden="true" />
+            <Phone className="contact-icon" size={32} strokeWidth={1.75} aria-hidden="true" />
             <p className="contact-label">Telefone</p>
             <a className="contact-value" href={`tel:${contato.telefone.replace(/[^+\d]/g, "")}`}>
               {contato.telefone}

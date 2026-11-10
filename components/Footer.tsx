@@ -1,4 +1,5 @@
-import { contato, rodape } from "@/content/site";
+import Link from "next/link";
+import { contato, navRodape, rodape } from "@/content/site";
 
 export default function Footer() {
   return (
@@ -7,6 +8,15 @@ export default function Footer() {
         <p>
           {rodape.assinatura} · {rodape.lema}
         </p>
+        <nav aria-label="Rodapé">
+          <ul className="footer-nav">
+            {navRodape.map((n) => (
+              <li key={n.href}>
+                <Link href={n.href}>{n.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <a href={contato.site} target="_blank" rel="noreferrer">
           {contato.pessoa}
         </a>

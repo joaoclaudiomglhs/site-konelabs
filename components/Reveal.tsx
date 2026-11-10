@@ -11,7 +11,7 @@ const group: Variants = {
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: springReveal },
 };
 

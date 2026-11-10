@@ -11,8 +11,8 @@ import { nav } from "@/content/site";
 export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  // Nas paginas de projeto, "Projetos" fica marcado como a localizacao atual.
-  const isCurrent = (href: string) => href === "/#projetos" && pathname.startsWith("/projetos");
+  // A pagina atual (e as paginas de projeto, dentro de /projetos) fica marcada no menu.
+  const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   useEffect(() => {
     if (!open) return;
@@ -33,19 +33,19 @@ export default function Header() {
           <ul>
             {nav.map((n) => (
               <li key={n.href}>
-                <a href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined}>
+                <Link href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined}>
                   {n.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
 
         <div className="header-actions">
-          <a className="btn btn-primary" href="/#contato">
+          <Link className="btn" href="/contato" aria-current={isCurrent("/contato") ? "page" : undefined}>
             Vamos conversar
             <ArrowRight className="btn-icon icon-right" size={18} aria-hidden="true" />
-          </a>
+          </Link>
           <button
             type="button"
             className="menu-toggle"
@@ -64,7 +64,7 @@ export default function Header() {
         {open && (
           <m.nav
             id="menu-mobile"
-            className="mobile-nav container"
+            className="mobile-nav"
             aria-label="Menu"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -74,15 +74,21 @@ export default function Header() {
             <ul>
               {nav.map((n) => (
                 <li key={n.href}>
-                  <a href={n.href} onClick={() => setOpen(false)}>
+                  <Link href={n.href} aria-current={isCurrent(n.href) ? "page" : undefined} onClick={() => setOpen(false)}>
                     {n.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li>
-                <a href="/#contato" onClick={() => setOpen(false)}>
+                <Link
+                  href="/contato"
+                  className="mobile-nav-cta"
+                  aria-current={isCurrent("/contato") ? "page" : undefined}
+                  onClick={() => setOpen(false)}
+                >
                   Vamos conversar
-                </a>
+                  <ArrowRight size={18} aria-hidden="true" />
+                </Link>
               </li>
             </ul>
           </m.nav>

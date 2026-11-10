@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { m, useReducedMotion, type Variants } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
 import Cover from "@/components/Cover";
 import { springHover } from "@/lib/motion";
 import type { Projeto } from "@/content/site";
@@ -30,15 +29,10 @@ export default function WorkCard({ projeto: p }: { projeto: Projeto }) {
     >
       <Cover src={p.capa} alt={`Capa do projeto ${p.nome}`} label={p.nome} variants={reduce ? undefined : coverZoom} />
       <div className="work-info">
-        <div>
-          <h3>{p.nome}</h3>
-          <p className="work-meta">
-            {p.categoria} · {p.ano}
-          </p>
-        </div>
-        <span className="work-arrow" aria-hidden="true">
-          <ArrowUpRight size={20} />
-        </span>
+        <h3>{p.nome}</h3>
+        <p className="work-meta">
+          {p.categoria} · {p.ano}
+        </p>
       </div>
     </MotionLink>
   );
