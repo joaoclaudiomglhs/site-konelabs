@@ -479,6 +479,28 @@ button {
   touch-action: pan-y;
 }
 
+/* Cena 3D: quadro com proporcao fixa, o canvas ocupa tudo e entra com fade quando estiver pronto */
+.hero-scene {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 1 / 0.92;
+  margin-inline: auto;
+  touch-action: pan-y;
+}
+
+.hero-scene canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+.hero-scene[data-pronto="true"] canvas {
+  opacity: 1;
+}
+
 .hero-art svg {
   display: block;
   width: 100%;
@@ -490,7 +512,8 @@ button {
   .hero-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .hero-art {
+  .hero-art,
+  .hero-scene {
     max-width: 520px;
   }
 }
