@@ -13,58 +13,61 @@ import { Caixa, FaceEsquerda, P, TONS, Topo } from "@/components/ServiceArt";
 const VOLTA_CONE = 24; // segundos por volta do simbolo
 const VOLTA_ORBITA = 60; // segundos por volta dos elementos
 
-// Simbolo: cone com a base arredondada, como na marca. Coordenadas da cena, origem no centro da base.
-const APICE = -118;
-const RAIO = 66;
-const ACHATA = 0.3; // proporcao vertical das elipses (camera levemente acima)
-const ANEIS: [number, number][] = [
-  // [y do anel, raio] da base arredondada, de cima para baixo
-  [0, RAIO],
-  [10, RAIO * 0.92],
-  [18, RAIO * 0.72],
-  [23, RAIO * 0.42],
-  [25, 0],
-];
-const FATIAS = 28;
+// Simbolo: mesma geometria do icone da marca (Logo Konelabs/Konelabs icon 200.svg), em 3D.
+// No icone: apice em y 47.8, laterais retas ate y 126.3 (raio 36.2) e base arredondada,
+// uma elipse de raio 37.2 por 20.4 centrada em y 131.2. Aqui tudo em escala 2.2, origem no centro da base.
+const ESCALA = 2.2;
+const APICE = (47.8 - 131.2) * ESCALA;
+const Y_ANEL = (126.35 - 131.2) * ESCALA;
+const R_ANEL = 36.2 * ESCALA;
+const BASE_RX = 37.2 * ESCALA;
+const BASE_RY = 20.4 * ESCALA;
+const INCLINACAO = 0.08; // camera quase no nivel, como no desenho da logo
+const FATIAS = 40;
+const FAIXAS = 8;
 
-// Verdes da marca, do mais escuro (lado na sombra) ao mais claro (lado na luz).
-const VERDE_ESCURO = [6, 70, 34];
-const VERDE_CLARO = [70, 255, 140];
-const tom = (luz: number) => {
-  const t = Math.min(1, Math.max(0, luz));
-  const c = VERDE_ESCURO.map((v, i) => Math.round(v + (VERDE_CLARO[i] - v) * t));
-  return `rgb(${c[0]},${c[1]},${c[2]})`;
+// Cores exatas da logo: o corpo vai de #0FDF5C (lado iluminado) a #21AF56 (lado na sombra)
+// e a base vai de #00FF5F a #0DD357, como as duas metades do icone.
+const CORPO = { luz: [0x0f, 0xdf, 0x5c], sombra: [0x21, 0xaf, 0x56] };
+const BASE = { luz: [0x00, 0xff, 0x5f], sombra: [0x0d, 0xd3, 0x57] };
+const mistura = (c: { luz: number[]; sombra: number[] }, t: number) => {
+  const k = Math.min(1, Math.max(0, t));
+  const v = c.sombra.map((s, i) => Math.round(s + (c.luz[i] - s) * k));
+  return `rgb(${v[0]},${v[1]},${v[2]})`;
 };
-// Luz vindo do alto, a esquerda e da frente.
-const luzDe = (a: number, inclinacao: number) => 0.38 + 0.72 * (-0.75 * Math.sin(a) + 0.45 * Math.cos(a)) * inclinacao;
+// Luz vindo da esquerda, como a divisao clara e escura do icone.
+const luzDe = (a: number) => 0.5 - 0.62 * Math.sin(a);
 
 function Cone({ giro }: { giro: number }) {
   const faces: ReactNode[] = [];
   const passo = (Math.PI * 2) / FATIAS;
-  const ponto = (a: number, y: number, r: number) => `${(r * Math.sin(a)).toFixed(2)},${(y + r * ACHATA * Math.cos(a)).toFixed(2)}`;
+  const pAnel = (a: number) => `${(R_ANEL * Math.sin(a)).toFixed(2)},${(Y_ANEL + INCLINACAO * R_ANEL * Math.cos(a)).toFixed(2)}`;
+  // Ponto da base arredondada (elipsoide achatado) na latitude b e longitude a.
+  const pBase = (a: number, b: number) =>
+    `${(BASE_RX * Math.cos(b) * Math.sin(a)).toFixed(2)},${(-BASE_RY * Math.sin(b) + INCLINACAO * BASE_RX * Math.cos(b) * Math.cos(a)).toFixed(2)}`;
+
+  // Corpo do cone primeiro; a base arredondada fica por cima, como no icone.
   for (let i = 0; i < FATIAS; i++) {
     const a0 = giro + i * passo;
     const a1 = a0 + passo;
     const meio = a0 + passo / 2;
-    if (Math.cos(meio) < -0.05) continue; // so as faces voltadas para a frente
-    // Corpo do cone: do apice ate o anel da base
-    const corCorpo = tom(luzDe(meio, 1));
-    faces.push(
-      <polygon key={`c${i}`} points={`0,${APICE} ${ponto(a0, 0, RAIO)} ${ponto(a1, 0, RAIO)}`} fill={corCorpo} stroke={corCorpo} strokeWidth={0.6} />,
-    );
-    // Base arredondada: faixas entre os aneis
-    for (let k = 0; k < ANEIS.length - 1; k++) {
-      const [y0, r0] = ANEIS[k];
-      const [y1, r1] = ANEIS[k + 1];
-      const cor = tom(luzDe(meio, 1) - 0.12 - k * 0.1);
+    if (Math.cos(meio) < -0.05) continue;
+    const cor = mistura(CORPO, luzDe(meio));
+    faces.push(<polygon key={`c${i}`} points={`0,${APICE.toFixed(2)} ${pAnel(a0)} ${pAnel(a1)}`} fill={cor} stroke={cor} strokeWidth={0.7} />);
+  }
+  for (let i = 0; i < FATIAS; i++) {
+    const a0 = giro + i * passo;
+    const a1 = a0 + passo;
+    const meio = a0 + passo / 2;
+    if (Math.cos(meio) < -0.05) continue;
+    for (let k = 0; k < FAIXAS; k++) {
+      const b0 = Math.PI / 2 - (k * Math.PI) / FAIXAS;
+      const b1 = b0 - Math.PI / FAIXAS;
+      // A parte de baixo da base escurece um pouco, para dar volume sem sair da paleta da logo.
+      const t = luzDe(meio) - Math.max(0, -(b0 + b1) / 2) * 0.35;
+      const cor = mistura(BASE, t);
       faces.push(
-        <polygon
-          key={`b${i}-${k}`}
-          points={`${ponto(a0, y0, r0)} ${ponto(a1, y0, r0)} ${ponto(a1, y1, r1)} ${ponto(a0, y1, r1)}`}
-          fill={cor}
-          stroke={cor}
-          strokeWidth={0.6}
-        />,
+        <polygon key={`b${i}-${k}`} points={`${pBase(a0, b0)} ${pBase(a1, b0)} ${pBase(a1, b1)} ${pBase(a0, b1)}`} fill={cor} stroke={cor} strokeWidth={0.7} />,
       );
     }
   }
@@ -163,11 +166,24 @@ const ELEMENTOS: Elemento[] = [
   },
 ];
 
-// Orbitas: elipses inclinadas ao redor do simbolo.
-const ORBITA = { rx: 178, ry: 52, cy: -20 };
-const ORBITA_2 = { rx: 132, ry: 38, cy: -70 };
+// Orbitas em tres alturas: acima do apice, na altura do corpo e abaixo da base.
+type Orbita = { rx: number; ry: number; cy: number };
+const ORBITAS: Orbita[] = [
+  { rx: 150, ry: 32, cy: -175 },
+  { rx: 215, ry: 52, cy: -60 },
+  { rx: 170, ry: 36, cy: 85 },
+];
+// Cada elemento fica em uma orbita, com um angulo inicial proprio.
+const POSICOES = [
+  { orbita: 1, inicio: 0 },
+  { orbita: 0, inicio: 1.3 },
+  { orbita: 2, inicio: 2.2 },
+  { orbita: 1, inicio: 3.4 },
+  { orbita: 2, inicio: 4.9 },
+  { orbita: 0, inicio: 4.4 },
+];
 
-const elipse = (o: { rx: number; ry: number; cy: number }, frente: boolean) =>
+const elipse = (o: Orbita, frente: boolean) =>
   // Metade de tras (de cima) ou da frente (de baixo) da elipse, para o simbolo ficar entre elas.
   frente
     ? `M${-o.rx} ${o.cy} A${o.rx} ${o.ry} 0 0 0 ${o.rx} ${o.cy}`
@@ -176,8 +192,9 @@ const elipse = (o: { rx: number; ry: number; cy: number }, frente: boolean) =>
 function Orbitas({ frente, pontos }: { frente: boolean; pontos: { x: number; y: number; frente: boolean }[] }) {
   return (
     <g>
-      <path d={elipse(ORBITA, frente)} fill="none" stroke="#3a3a3a" strokeWidth={1.1} strokeDasharray="2.5 3.5" className="art-flow" />
-      <path d={elipse(ORBITA_2, frente)} fill="none" stroke="#2f2f2f" strokeWidth={1} strokeDasharray="2.5 3.5" className="art-flow art-delay-1" />
+      {ORBITAS.map((o, i) => (
+        <path key={i} d={elipse(o, frente)} fill="none" stroke="#3a3a3a" strokeWidth={1.1} strokeDasharray="2.5 3.5" className={`art-flow art-delay-${i % 3}`} />
+      ))}
       {pontos
         .filter((p) => p.frente === frente)
         .map((p, i) => (
@@ -216,20 +233,24 @@ export default function HeroArt() {
 
   // Posicao de cada elemento na orbita; os da frente ficam maiores e sobre o simbolo.
   const itens = ELEMENTOS.map((el, i) => {
-    const a = orbita + (i / ELEMENTOS.length) * Math.PI * 2;
+    const pos = POSICOES[i];
+    const o = ORBITAS[pos.orbita];
+    // A orbita do meio gira no sentido contrario, para os elementos se cruzarem acima e abaixo do simbolo.
+    const a = (pos.orbita === 1 ? -orbita : orbita) + pos.inicio;
     const profundidade = Math.sin(a); // 1 na frente, -1 atras
     const escala = 1.35 + 0.55 * ((profundidade + 1) / 2);
-    const x = ORBITA.rx * Math.cos(a) + ponteiro.x * (6 + 8 * profundidade);
-    const y = ORBITA.cy + ORBITA.ry * profundidade + ponteiro.y * (4 + 5 * profundidade) + Math.sin(t * 0.9 + i * 1.7) * 4;
+    const x = o.rx * Math.cos(a) + ponteiro.x * (6 + 8 * profundidade);
+    const y = o.cy + o.ry * profundidade + ponteiro.y * (4 + 5 * profundidade) + Math.sin(t * 0.9 + i * 1.7) * 5;
     const [cx, cy] = P(...el.centro);
     return { el, profundidade, escala, x, y, cx, cy, opacidade: 0.55 + 0.45 * ((profundidade + 1) / 2) };
   });
 
   // Pontos verdes percorrendo as orbitas, no sentido contrario aos elementos.
   const pontos = [
-    { o: ORBITA, a: -orbita * 2.2 },
-    { o: ORBITA, a: -orbita * 2.2 + Math.PI },
-    { o: ORBITA_2, a: orbita * 3 + 1 },
+    { o: ORBITAS[0], a: orbita * 3 + 1 },
+    { o: ORBITAS[1], a: -orbita * 2.2 },
+    { o: ORBITAS[1], a: -orbita * 2.2 + Math.PI },
+    { o: ORBITAS[2], a: orbita * 2.6 + 2 },
   ].map(({ o, a }) => ({ x: o.rx * Math.cos(a), y: o.cy + o.ry * Math.sin(a), frente: Math.sin(a) > 0 }));
 
   const desenhar = (frente: boolean) =>
@@ -248,7 +269,7 @@ export default function HeroArt() {
   return (
     <div ref={area} className="hero-art" onPointerMove={mover} onPointerLeave={sair}>
       <svg
-        viewBox="-240 -170 480 280"
+        viewBox="-270 -250 540 400"
         role="img"
         aria-label="Símbolo da Konelabs em 3D girando devagar, com janela de site, bloco de código, camadas de produto, gráfico, celular e chip de IA em órbita ao redor"
       >
@@ -258,8 +279,8 @@ export default function HeroArt() {
             <stop offset="100%" stopColor="#02ff55" stopOpacity={0} />
           </radialGradient>
         </defs>
-        <ellipse cx={0} cy={-40} rx={150} ry={130} fill="url(#hero-brilho)" />
-        <ellipse cx={coneX} cy={62} rx={78} ry={12} fill="#0a0a0a" opacity={0.7} />
+        <ellipse cx={0} cy={-60} rx={170} ry={170} fill="url(#hero-brilho)" />
+        <ellipse cx={coneX} cy={64} rx={80} ry={10} fill="#0a0a0a" opacity={0.7} />
 
         <Orbitas frente={false} pontos={pontos} />
         {desenhar(false)}
