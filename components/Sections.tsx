@@ -15,6 +15,7 @@ import {
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import WorkCard from "@/components/WorkCard";
 import ServiceArt from "@/components/ServiceArt";
+import HeroArt from "@/components/HeroArt";
 import FaqList from "@/components/FaqList";
 import CopyEmail from "@/components/CopyEmail";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
@@ -74,28 +75,21 @@ function SectionHead({ tag, id, titulo, apoio }: { tag: string; id: string; titu
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
-      <RevealGroup className="container">
-        <RevealItem>
-          <h1 className="hero-title" id="hero-title">
-            {hero.titulo
-              .split(new RegExp(`(${hero.destaques.join("|")})`))
-              .map((parte, i) => (hero.destaques.includes(parte) ? <em key={i}>{parte}</em> : <span key={i}>{parte}</span>))}
-          </h1>
-        </RevealItem>
-        <RevealItem className="hero-bottom">
-          <div>
+      <RevealGroup className="container hero-grid">
+        <div className="hero-text">
+          <RevealItem>
+            <h1 className="hero-title" id="hero-title">
+              {hero.titulo
+                .split(new RegExp(`(${hero.destaques.join("|")})`))
+                .map((parte, i) => (hero.destaques.includes(parte) ? <em key={i}>{parte}</em> : <span key={i}>{parte}</span>))}
+            </h1>
+          </RevealItem>
+          <RevealItem className="hero-bottom">
             <p className="lead">{hero.apoio}</p>
-            <p className="hero-meta">
-              <span>
-                <MapPin size={16} aria-hidden="true" color="var(--accent)" />
-                {hero.origem}
-              </span>
-              <span>
-                <CalendarClock size={16} aria-hidden="true" color="var(--accent)" />
-                {hero.desde}
-              </span>
-            </p>
-          </div>
+          </RevealItem>
+        </div>
+        <RevealItem className="hero-art-wrap">
+          <HeroArt />
         </RevealItem>
       </RevealGroup>
     </section>

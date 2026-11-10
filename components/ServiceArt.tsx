@@ -10,12 +10,12 @@ const OX = 80;
 const OY = 52;
 
 // Projecao isometrica: x e y no chao, z para cima.
-const P = (x: number, y: number, z: number): [number, number] => [OX + (x - y) * K, OY + (x + y) * 0.5 - z];
-const pts = (...p: [number, number][]) => p.map(([a, b]) => `${a.toFixed(2)},${b.toFixed(2)}`).join(" ");
+export const P = (x: number, y: number, z: number): [number, number] => [OX + (x - y) * K, OY + (x + y) * 0.5 - z];
+export const pts = (...p: [number, number][]) => p.map(([a, b]) => `${a.toFixed(2)},${b.toFixed(2)}`).join(" ");
 
-type Tom = { top: string; left: string; right: string };
+export type Tom = { top: string; left: string; right: string };
 
-const TONS = {
+export const TONS = {
   chao: { top: "#1b1b1b", left: "#151515", right: "#111111" },
   base: { top: "#2b2b2b", left: "#212121", right: "#1b1b1b" },
   medio: { top: "#3a3a3a", left: "#2b2b2b", right: "#212121" },
@@ -25,7 +25,7 @@ const TONS = {
 } satisfies Record<string, Tom>;
 
 // Caixa com as tres faces visiveis: topo, face frontal esquerda (y maximo) e face frontal direita (x maximo).
-function Caixa({ x, y, z, w, d, h, tom }: { x: number; y: number; z: number; w: number; d: number; h: number; tom: Tom }) {
+export function Caixa({ x, y, z, w, d, h, tom }: { x: number; y: number; z: number; w: number; d: number; h: number; tom: Tom }) {
   const t = z + h;
   return (
     <g>
@@ -38,13 +38,13 @@ function Caixa({ x, y, z, w, d, h, tom }: { x: number; y: number; z: number; w: 
 
 // Conteudo desenhado sobre um plano. Coordenadas locais (u, v), com v para cima.
 // Face frontal esquerda: plano y = y0, u ao longo de x.
-function FaceEsquerda({ y0, children }: { y0: number; children: ReactNode }) {
+export function FaceEsquerda({ y0, children }: { y0: number; children: ReactNode }) {
   const [e, f] = P(0, y0, 0);
   return <g transform={`matrix(${K} 0.5 0 -1 ${e.toFixed(2)} ${f.toFixed(2)})`}>{children}</g>;
 }
 
 // Topo: plano z = z0, u ao longo de x e w ao longo de y.
-function Topo({ z0, children }: { z0: number; children: ReactNode }) {
+export function Topo({ z0, children }: { z0: number; children: ReactNode }) {
   const [e, f] = P(0, 0, z0);
   return <g transform={`matrix(${K} 0.5 ${-K} 0.5 ${e.toFixed(2)} ${f.toFixed(2)})`}>{children}</g>;
 }

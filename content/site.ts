@@ -25,8 +25,6 @@ export const hero = {
   destaques: ["Estratégia", "confiança", "crescimento"],
   apoio:
     "Criamos sites e produtos que posicionam a marca, conquistam quem visita e transformam visitantes em clientes.",
-  origem: "Do Brasil para o mundo",
-  desde: "Desde 2018",
 };
 
 export type Servico = {

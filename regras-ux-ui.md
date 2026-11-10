@@ -16,7 +16,7 @@ Documento único com todas as regras de interface, experiência e motion para pr
 ### Estética de superfícies
 
 - Menu com blur no fundo: o cabeçalho fixo usa fundo escuro translúcido (#0F0F0F com cerca de 55% de opacidade) e backdrop-filter com blur de 20px. O blur faz parte da estética da Konelabs e deve ser mantido em todo menu fixo, inclusive no menu mobile.
-- Noise suave no fundo principal: uma textura de ruído fina e de baixa opacidade (cerca de 5%) cobre o fundo #0F0F0F. Fica atrás do conteúdo, não recebe cliques e nunca prejudica a leitura.
+- Noise em todo background, sempre: o fundo da página, o header, os cards, os blocos de logo e os controles levam uma textura de ruído fina e de baixa opacidade (cerca de 5% a 7%). Nenhuma superfície fica lisa. O noise fica atrás do conteúdo, não recebe cliques e nunca prejudica a leitura. No código, use o token `--noise` como primeira camada do `background` de qualquer superfície nova.
 - Cards de destaque em cinza mais claro: para destacar um card (por exemplo números, a ação de contato principal ou resultados), usar uma superfície cinza mais clara que a padrão (#212121, com borda #3A3A3A). Cards comuns usam #151515. Usar com moderação: só alguns cards por tela ficam em destaque.
 
 ### Tokens compartilhados entre site e proposta comercial
@@ -243,6 +243,6 @@ Sequência e animação:
 - Teclado, foco visível, nomes acessíveis, rótulos e contraste verificados.
 - Sem emojis, sem travessão longo, sem bordas laterais em cards arredondados, sem verde em grandes áreas.
 - Resultado de validação informado com honestidade.
-- Menu com blur no fundo, noise suave no fundo principal e cards de destaque em cinza mais claro.
+- Menu com blur no fundo, noise em todas as superfícies e cards de destaque em cinza mais claro.
 - Site e proposta comercial com os mesmos tokens, fontes (Inter e Space Mono), botões e cards.
 - Nenhum item enumerado em listas, menus, serviços, setores ou etapas.

@@ -1,5 +1,8 @@
 /* Tokens do Guia Konelabs, alinhados a proposta comercial */
 :root {
+  /* Noise de baixa opacidade: obrigatorio em todo fundo (pagina, header, cards, controles) */
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --noise-size: 200px 200px;
   --bg: #0f0f0f;
   --surface: #151515;
   --surface-2: #1b1b1b;
@@ -76,9 +79,9 @@ body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
+  opacity: 0.7;
+  background-image: var(--noise);
+  background-size: var(--noise-size);
 }
 
 img,
@@ -142,7 +145,7 @@ button {
   top: -100px;
   z-index: 100;
   padding: 10px 16px;
-  background: var(--surface-2);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface-2);
   border: 1px solid var(--accent);
   border-radius: 8px;
 }
@@ -235,7 +238,7 @@ button {
   padding: 0 20px;
   border-radius: var(--radius-control);
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface);
   color: var(--text);
   font-size: 15px;
   font-weight: 500;
@@ -253,7 +256,7 @@ button {
 
 .btn:hover {
   border-color: var(--accent);
-  background: var(--surface-2);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface-2);
   transform: translateY(-2px);
 }
 
@@ -319,7 +322,7 @@ button {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--header-bg);
+  background: var(--noise) 0 0 / var(--noise-size), var(--header-bg);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   backdrop-filter: blur(20px) saturate(140%);
   border-bottom: 1px solid var(--line);
@@ -375,7 +378,7 @@ button {
   height: 48px;
   border-radius: var(--radius-control);
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface);
   cursor: pointer;
 }
 
@@ -457,8 +460,43 @@ button {
   padding-block: clamp(64px, 12vw, 160px) clamp(56px, 8vw, 104px);
 }
 
+/* Texto a esquerda e ilustracao interativa a direita; abaixo de 1000px a ilustracao desce */
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.hero-art-wrap {
+  align-self: center;
+}
+
+.hero-art {
+  width: 100%;
+  max-width: 540px;
+  margin-inline: auto;
+  touch-action: pan-y;
+}
+
+.hero-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+@media (max-width: 1000px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero-art {
+    max-width: 380px;
+  }
+}
+
 .hero-title {
-  font-size: clamp(36px, 5.4vw, 64px);
+  font-size: clamp(36px, 4.8vw, 60px);
   line-height: 1.12;
   letter-spacing: -0.02em;
   max-width: 22ch;
@@ -481,23 +519,6 @@ button {
 
 .hero-bottom .lead {
   max-width: 48ch;
-}
-
-.hero-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 32px;
-  margin-top: 24px;
-  font: 400 12px/1.4 var(--font-mono);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.hero-meta span {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
 @media (max-width: 720px) {
@@ -687,7 +708,7 @@ button {
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface);
 }
 
 /* O zoom da imagem no hover e animado pelo Framer Motion (components/WorkCard.tsx).
@@ -764,7 +785,7 @@ button {
   min-height: 104px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: var(--surface);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface);
   /* Curva sem ultrapassagem e duracao mais longa: subida e descida suaves, sem quique */
   transition:
     transform 0.5s var(--ease),
@@ -777,7 +798,7 @@ button {
 .client:has(a:focus-visible) {
   transform: translateY(-3px);
   border-color: var(--line-strong);
-  background: var(--surface-2);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface-2);
 }
 
 .client > a,
@@ -852,7 +873,7 @@ button {
 
 /* Card de destaque: cinza mais claro, sem borda lateral */
 .card-raised {
-  background: var(--surface-raised);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface-raised);
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
 }
@@ -965,7 +986,7 @@ button {
   height: 40px;
   border-radius: var(--radius-control);
   border: 1px solid var(--line);
-  background: var(--surface);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface);
   color: var(--accent);
   transition: border-color 0.3s var(--ease);
 }
@@ -1020,13 +1041,13 @@ button {
   gap: 16px;
   align-content: start;
   padding: 24px;
-  background: var(--surface);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
 
 .contact-item.card-raised {
-  background: var(--surface-raised);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface-raised);
   border-color: var(--line-strong);
 }
 
@@ -1055,7 +1076,7 @@ button {
   padding: 0 14px;
   border-radius: var(--radius-control);
   border: 1px solid var(--line);
-  background: var(--surface-2);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface-2);
   font-size: 14px;
   color: var(--text-muted);
   cursor: pointer;
