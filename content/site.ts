@@ -101,7 +101,7 @@ export type Projeto = {
 };
 
 // Descricoes traduzidas do site atual (em ingles).
-export const projetos: Projeto[] = [
+export const projetos: Projeto[] = [   {     slug: "pedro-nomu",     nome: "Pedro Nomu",     ano: 2026,     categoria: "Site institucional",     setor: "Tatuagem e arte visual",     descricao: "Site de Pedro Nomu, tatuador e artista visual em Brasília. Reúne portfólio autoral, processo criativo, informações do estúdio e canais para agendamento.",     url: "https://www.pedronomu.com.br/",     capa: "/capas/pedro-nomu.png",     entregas: ["Design do site", "Desenvolvimento do site"],     ferramentas: ["Web"],     desafio: "Apresentar o trabalho autoral de Pedro Nomu e ajudar quem chega ao site a explorar as tatuagens, conhecer o processo e encontrar o caminho para agendar.",     solucao: "O site reúne portfólio com filtros por estilo, páginas individuais para os trabalhos, conteúdo sobre o processo de criação, dúvidas frequentes, artigos e canais de contato.",   },
   {
     slug: "aranet-play",
     nome: "Aranet Play",
