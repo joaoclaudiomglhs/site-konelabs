@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import type { Servico } from "@/content/site";
 
 // Ilustracoes isometricas (3D) dos servicos, desenhadas em SVG puro, sem dependencia.
@@ -58,7 +58,6 @@ function Chao() {
 function Web() {
   return (
     <>
-      <Chao />
       <Caixa x={0} y={0} z={0} w={64} d={64} h={5} tom={TONS.base} />
       <Caixa x={6} y={30} z={5} w={46} d={4} h={40} tom={TONS.medio} />
       <FaceEsquerda y0={34}>
@@ -87,7 +86,6 @@ function Web() {
 function Estrategia() {
   return (
     <>
-      <Chao />
       <Caixa x={0} y={0} z={0} w={64} d={64} h={5} tom={TONS.base} />
       {/* Caminho tracejado no chao, atras dos blocos */}
       <Topo z0={5.2}>
@@ -113,7 +111,6 @@ function Estrategia() {
 function Produtos() {
   return (
     <>
-      <Chao />
       <Caixa x={4} y={4} z={0} w={56} d={56} h={4} tom={TONS.base} />
       <g className="art-bob art-delay-2">
         <Caixa x={8} y={8} z={14} w={48} d={48} h={3} tom={TONS.medio} />
@@ -139,7 +136,6 @@ function Produtos() {
 function FrontEnd() {
   return (
     <>
-      <Chao />
       <Caixa x={0} y={0} z={0} w={64} d={64} h={5} tom={TONS.base} />
       <Caixa x={8} y={26} z={5} w={50} d={10} h={36} tom={TONS.medio} />
       <FaceEsquerda y0={36}>
@@ -178,7 +174,6 @@ function Pessoa({ x, y, tom, cabeca }: { x: number; y: number; tom: Tom; cabeca:
 function Times() {
   return (
     <>
-      <Chao />
       <Caixa x={0} y={0} z={0} w={64} d={64} h={5} tom={TONS.base} />
       <g className="art-bob art-delay-2">
         <Pessoa x={8} y={8} tom={TONS.medio} cabeca="#6b6b6b" />
@@ -205,11 +200,27 @@ const CENAS: Record<Servico["icone"], { desenho: () => ReactNode; rotulo: string
   users: { desenho: Times, rotulo: "Três pessoas em volta de uma mesa" },
 };
 
+// Contorno de hover (guidelines, secao 15.2): anel branco de cerca de 2 px em volta da silhueta dos volumes,
+// sem a linha de chao. O filtro dilata o alfa do desenho e fica so com o que passa da silhueta.
+// O anel e uma copia do desenho, atras do original, que aparece com fade no hover ou foco do servico.
 export default function ServiceArt({ tipo }: { tipo: Servico["icone"] }) {
   const cena = CENAS[tipo];
   const Desenho = cena.desenho;
+  const filtro = `anel-${useId().replace(/:/g, "")}`;
   return (
     <svg className="service-art" viewBox="0 0 160 140" role="img" aria-label={cena.rotulo}>
+      <defs>
+        <filter id={filtro} x="-10%" y="-10%" width="120%" height="120%">
+          <feMorphology in="SourceAlpha" operator="dilate" radius="2" result="dilatado" />
+          <feComposite in="dilatado" in2="SourceAlpha" operator="out" result="anel" />
+          <feFlood floodColor="#ffffff" />
+          <feComposite in2="anel" operator="in" />
+        </filter>
+      </defs>
+      <Chao />
+      <g className="art-contorno" filter={`url(#${filtro})`} aria-hidden="true">
+        <Desenho />
+      </g>
       <Desenho />
     </svg>
   );

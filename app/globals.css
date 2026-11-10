@@ -779,6 +779,23 @@ button {
   transform: translateY(-4px);
 }
 
+/* Contorno de hover das ilustracoes 3D (guidelines, secao 15.2): anel branco que entra com fade de 0,25 s */
+.art-contorno {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.service:hover .art-contorno,
+.service:focus-within .art-contorno {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .art-contorno {
+    transition: none;
+  }
+}
+
 .service h3 {
   font-size: clamp(20px, 2vw, 24px);
   line-height: 1.25;
