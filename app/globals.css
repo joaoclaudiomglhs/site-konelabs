@@ -1523,3 +1523,150 @@ button {
     animation: none !important;
   }
 }
+
+/* Pagina protegida por senha (propostas comerciais) */
+.senha-pagina {
+  min-height: 80dvh;
+  display: grid;
+  place-items: center;
+  padding-block: calc(var(--section-y) + 40px) var(--section-y);
+}
+
+.senha-card {
+  width: 100%;
+  max-width: 440px;
+  display: grid;
+  gap: 24px;
+  padding: clamp(28px, 5vw, 40px);
+}
+
+.senha-icone {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface-2);
+  color: var(--accent);
+}
+
+.senha-titulo {
+  font-size: clamp(26px, 3vw, 32px);
+  text-wrap: balance;
+}
+
+.senha-form {
+  display: grid;
+  gap: 10px;
+}
+
+.senha-label {
+  font: 400 12px/1.4 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.senha-campo {
+  position: relative;
+}
+
+.senha-campo input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 52px 0 16px;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--line-strong);
+  background: var(--noise) 0 0 / var(--noise-size), var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  transition: border-color 0.25s var(--ease);
+}
+
+.senha-campo input:hover {
+  border-color: var(--text-muted);
+}
+
+.senha-campo input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(2, 255, 85, 0.2);
+}
+
+.senha-campo input[aria-invalid="true"] {
+  border-color: #ff6b6b;
+}
+
+.senha-ver {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.senha-ver:hover {
+  color: var(--text);
+}
+
+.senha-erro {
+  min-height: 1.4em;
+  margin: 0;
+  font-size: 14px;
+  color: #ff8a8a;
+}
+
+.senha-erro:empty {
+  min-height: 0;
+}
+
+.senha-enviar {
+  justify-content: center;
+  margin-top: 6px;
+}
+
+.senha-enviar:disabled {
+  cursor: progress;
+  opacity: 0.75;
+  transform: none;
+}
+
+.senha-girando {
+  animation: senha-girar 0.9s linear infinite;
+}
+
+@keyframes senha-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.senha-ajuda {
+  margin: 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.senha-ajuda a {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.senha-ajuda a:hover {
+  color: var(--accent);
+}
