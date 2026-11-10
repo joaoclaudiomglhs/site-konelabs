@@ -456,6 +456,109 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
   raiz.add(particulas);
   descartaveis.push(geoParticulas, matParticulas);
 
+  // ---------- Contorno de hover (guidelines, secao 15.2) ----------
+  // Ao passar o mouse sobre o simbolo ou um card, aparece um contorno branco de cerca de 2 px em toda a
+  // silhueta, com fade de 0,25 s. A silhueta e desenhada numa mascara (objeto em vermelho, objetos a frente
+  // dele em verde), dilatada num passe de tela cheia (16 amostras em dois raios). So o anel fora da
+  // silhueta e desenhado por cima da cena, e os objetos a frente cortam o contorno.
+  // Linhas, pontos de luz, particulas, brilho e sombra do chao nao entram na mascara.
+  const alvos: THREE.Object3D[] = [simbolo, ...pecas.map((p) => p.objeto)];
+  const alvoDaMalha = new Map<THREE.Mesh, THREE.Object3D>();
+  alvos.forEach((a) => a.traverse((o) => o instanceof THREE.Mesh && alvoDaMalha.set(o, a)));
+  const malhasAlvo = [...alvoDaMalha.keys()];
+  const desenhaveis: THREE.Object3D[] = [];
+  cena.traverse((o) => {
+    if (o instanceof THREE.Mesh || o instanceof THREE.Line || o instanceof THREE.Points || o instanceof THREE.Sprite) desenhaveis.push(o);
+  });
+  const matSilhueta = new THREE.MeshBasicMaterial({ color: 0xff0000, fog: false });
+  const matFrente = new THREE.MeshBasicMaterial({ color: 0x00ff00, fog: false });
+  const mascara = new THREE.WebGLRenderTarget(1, 1, { samples: 4 });
+  const matAnel = new THREE.ShaderMaterial({
+    uniforms: { mascara: { value: mascara.texture }, passo: { value: new THREE.Vector2(1, 1) }, opacidade: { value: 0 } },
+    transparent: true,
+    depthTest: false,
+    depthWrite: false,
+    vertexShader: /* glsl */ `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position.xy, 0.0, 1.0);
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform sampler2D mascara;
+      uniform vec2 passo;
+      uniform float opacidade;
+      varying vec2 vUv;
+      void main() {
+        vec4 aqui = texture2D(mascara, vUv);
+        // Dentro da silhueta ou sobre um objeto a frente: sem contorno.
+        if (aqui.r > 0.5 || aqui.g > 0.5) discard;
+        float anel = 0.0;
+        for (int i = 0; i < 8; i++) {
+          float a = float(i) * 0.785398;
+          vec2 d = vec2(cos(a), sin(a)) * passo;
+          anel = max(anel, texture2D(mascara, vUv + d).r);
+          anel = max(anel, texture2D(mascara, vUv + d * 0.5).r);
+        }
+        if (anel < 0.01) discard;
+        gl_FragColor = vec4(1.0, 1.0, 1.0, anel * opacidade);
+      }
+    `,
+  });
+  const geoTela = new THREE.PlaneGeometry(2, 2);
+  const telaAnel = new THREE.Mesh(geoTela, matAnel);
+  telaAnel.frustumCulled = false;
+  const cenaAnel = new THREE.Scene();
+  cenaAnel.add(telaAnel);
+  const cameraTela = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  descartaveis.push(matSilhueta, matFrente, mascara, matAnel, geoTela);
+
+  const realce = { alvo: null as THREE.Object3D | null, opacidade: 0 };
+  const raio = new THREE.Raycaster();
+  const ndc = new THREE.Vector2();
+  let ponteiroDentro = false;
+  const posAlvo = new THREE.Vector3();
+  const posOutro = new THREE.Vector3();
+
+  function procurarAlvo() {
+    if (!ponteiroDentro) return null;
+    raio.setFromCamera(ndc, camera);
+    const toque = raio.intersectObjects(malhasAlvo, false)[0];
+    return toque ? alvoDaMalha.get(toque.object as THREE.Mesh) ?? null : null;
+  }
+
+  function desenharMascara(alvo: THREE.Object3D) {
+    alvo.getWorldPosition(posAlvo);
+    const distAlvo = posAlvo.distanceTo(camera.position);
+    const estado = desenhaveis.map((o) => ({ o, visivel: o.visible, material: (o as THREE.Mesh).material }));
+    desenhaveis.forEach((o) => {
+      const dono = o instanceof THREE.Mesh ? alvoDaMalha.get(o) : undefined;
+      if (!dono) {
+        o.visible = false;
+        return;
+      }
+      if (dono === alvo) {
+        (o as THREE.Mesh).material = matSilhueta;
+        return;
+      }
+      dono.getWorldPosition(posOutro);
+      if (posOutro.distanceTo(camera.position) < distAlvo) (o as THREE.Mesh).material = matFrente;
+      else o.visible = false; // atras do objeto: o contorno passa por cima dele
+    });
+    const nevoa = cena.fog;
+    cena.fog = null;
+    renderer.setRenderTarget(mascara);
+    renderer.clear();
+    renderer.render(cena, camera);
+    renderer.setRenderTarget(null);
+    cena.fog = nevoa;
+    estado.forEach(({ o, visivel, material }) => {
+      o.visible = visivel;
+      if (o instanceof THREE.Mesh) o.material = material as THREE.Material;
+    });
+  }
+
   // ---------- Interacao ----------
   const ponteiro = { x: 0, y: 0, alvoX: 0, alvoY: 0, perto: 0, alvoPerto: 0 };
   const mover = (e: PointerEvent) => {
@@ -464,11 +567,16 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     ponteiro.alvoX = ((e.clientX - r.left) / r.width) * 2 - 1;
     ponteiro.alvoY = ((e.clientY - r.top) / r.height) * 2 - 1;
     ponteiro.alvoPerto = 1;
+    ndc.set(ponteiro.alvoX, -ponteiro.alvoY);
+    ponteiroDentro = true;
+    if (opcoes.reduzir) desenhar(30, 0); // sem loop: redesenha so quando o ponteiro mexe
   };
   const sair = () => {
     ponteiro.alvoX = 0;
     ponteiro.alvoY = 0;
     ponteiro.alvoPerto = 0;
+    ponteiroDentro = false;
+    if (opcoes.reduzir) desenhar(30, 0);
   };
   host.addEventListener("pointermove", mover);
   host.addEventListener("pointerleave", sair);
@@ -478,6 +586,11 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     const { width, height } = host.getBoundingClientRect();
     if (!width || !height) return;
     renderer.setSize(width, height, false);
+    const buffer = renderer.getDrawingBufferSize(new THREE.Vector2());
+    mascara.setSize(buffer.x, buffer.y);
+    // Anel de cerca de 2 px de CSS, em pixels reais da tela
+    const px = 2 * renderer.getPixelRatio();
+    matAnel.uniforms.passo.value.set(px / buffer.x, px / buffer.y);
     camera.aspect = width / height;
     // Em telas estreitas a camera recua para a cena caber inteira.
     camera.position.z = camera.aspect < 1 ? 16.5 / camera.aspect ** 0.55 : 16.5;
@@ -546,6 +659,19 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     (particulas.material as THREE.PointsMaterial).opacity = 0.7 * e;
 
     renderer.render(cena, camera);
+
+    // Contorno de hover: entra e sai com fade de 0,25 s (direto com movimento reduzido).
+    const achado = procurarAlvo();
+    if (achado) realce.alvo = achado;
+    const alvoOpacidade = achado ? 1 : 0;
+    realce.opacidade = opcoes.reduzir ? alvoOpacidade : suavizar(realce.opacidade, alvoOpacidade, 16, dt);
+    if (realce.alvo && realce.opacidade > 0.01) {
+      desenharMascara(realce.alvo);
+      matAnel.uniforms.opacidade.value = realce.opacidade;
+      renderer.autoClear = false;
+      renderer.render(cenaAnel, cameraTela);
+      renderer.autoClear = true;
+    }
   }
 
   // ---------- Loop ----------
