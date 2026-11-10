@@ -229,7 +229,7 @@ const gradienteRadial = (cor: string, opacidade: number) =>
 // base #00FF5F (luz) e #0DD357 (sombra). Aqui cada faceta recebe uma dessas cores, sem gradiente:
 // se a faceta aponta para a esquerda da camera, fica com a cor clara; para a direita, com a escura.
 // Cada faceta ainda ganha um leve degrau de tom conforme o angulo, chapado na face inteira: assim as
-// arestas entre facetas ficam visiveis e o giro do simbolo se le, sem virar luz suave.
+// arestas entre facetas ficam visiveis, sem virar luz suave.
 const FACETAS = 12;
 const CRISTAL = {
   corpo: { luz: 0x0fdf5c, sombra: 0x21af56 },
@@ -318,7 +318,9 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
   simbolo.add(corpo, base);
   simbolo.scale.setScalar(escala);
   simbolo.position.y = -0.55;
-  raiz.add(simbolo);
+  // O simbolo fica parado, fora da raiz: nao gira, nao flutua e nao inclina com o ponteiro.
+  // So os elementos em volta se movem.
+  cena.add(simbolo);
 
   // Brilho verde atras do simbolo e sombra de contato abaixo dele
   const brilho = new THREE.Sprite(new THREE.SpriteMaterial({ map: gradienteRadial("rgba(2,255,85,A)", 0.22), depthWrite: false, transparent: true }));
@@ -331,7 +333,7 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
   );
   sombra.rotation.x = -Math.PI / 2;
   sombra.position.y = -1.55;
-  sombra.scale.set(1, 0.55, 1);
+  sombra.scale.set(0.9, 0.5, 1);
   raiz.add(sombra);
 
   // ---------- Orbitas ----------
@@ -505,15 +507,8 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     raiz.rotation.y = ponteiro.x * 0.32;
     raiz.rotation.x = ponteiro.y * 0.12;
 
-    // Simbolo: entra subindo e depois flutua, com um balanco lento.
+    // O simbolo e estatico; so o brilho e a sombra aparecem na entrada.
     const e = saida(t / 1.4);
-    simbolo.position.y = -0.55 - (1 - e) * 0.6 + Math.sin(t * 0.7) * 0.06;
-    simbolo.rotation.y = t * 0.5; // giro lento: as facetas passam pela divisao de luz e sombra
-    simbolo.rotation.z = Math.sin(t * 0.45) * 0.035;
-    simbolo.rotation.x = Math.cos(t * 0.38) * 0.03;
-    const s = escala * (0.85 + 0.15 * e);
-    simbolo.scale.setScalar(s);
-    sombra.scale.set(0.9 + Math.sin(t * 0.7) * 0.04, 0.5, 1);
     (sombra.material as THREE.MeshBasicMaterial).opacity = e;
     (brilho.material as THREE.SpriteMaterial).opacity = e * (0.85 + Math.sin(t * 0.9) * 0.15);
 
