@@ -74,7 +74,72 @@ function retangulo(c: CanvasRenderingContext2D, x: number, y: number, w: number,
   c.fill();
 }
 
+// Icones da Lucide (mesmos desenhos do site), em grade de 24 unidades, tracados no canvas.
+type NoIcone = ["path", string] | ["circle", number, number, number] | ["rect", number, number, number, number, number];
+const ICONES: Record<"pessoas" | "robos" | "metricas" | "web", NoIcone[]> = {
+  // users
+  pessoas: [
+    ["path", "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"],
+    ["path", "M16 3.128a4 4 0 0 1 0 7.744"],
+    ["path", "M22 21v-2a4 4 0 0 0-3-3.87"],
+    ["circle", 9, 7, 4],
+  ],
+  // bot
+  robos: [
+    ["path", "M12 8V4H8"],
+    ["rect", 4, 8, 16, 12, 2],
+    ["path", "M2 14h2"],
+    ["path", "M20 14h2"],
+    ["path", "M15 13v2"],
+    ["path", "M9 13v2"],
+  ],
+  // chart-column
+  metricas: [
+    ["path", "M3 3v16a2 2 0 0 0 2 2h16"],
+    ["path", "M18 17V9"],
+    ["path", "M13 17V5"],
+    ["path", "M8 17v-3"],
+  ],
+  // globe
+  web: [
+    ["circle", 12, 12, 10],
+    ["path", "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"],
+    ["path", "M2 12h20"],
+  ],
+};
+
+function faceIcone(icone: NoIcone[], fundo: number, traco: number) {
+  return (c: CanvasRenderingContext2D, w: number, h: number) => {
+    retangulo(c, 0, 0, w, h, w * 0.16, fundo);
+    const lado = w * 0.56;
+    c.save();
+    c.translate((w - lado) / 2, (h - lado) / 2);
+    c.scale(lado / 24, lado / 24);
+    c.strokeStyle = hex(traco);
+    c.lineWidth = 2;
+    c.lineCap = "round";
+    c.lineJoin = "round";
+    icone.forEach((no) => {
+      if (no[0] === "path") c.stroke(new Path2D(no[1]));
+      else if (no[0] === "circle") {
+        c.beginPath();
+        c.arc(no[1], no[2], no[3], 0, Math.PI * 2);
+        c.stroke();
+      } else {
+        c.beginPath();
+        c.roundRect(no[1], no[2], no[3], no[4], no[5]);
+        c.stroke();
+      }
+    });
+    c.restore();
+  };
+}
+
 const FACES = {
+  pessoas: faceIcone(ICONES.pessoas, COR.papel, COR.g1),
+  robos: faceIcone(ICONES.robos, COR.g3, COR.verde),
+  metricas: faceIcone(ICONES.metricas, COR.g2, COR.verde),
+  web: faceIcone(ICONES.web, COR.papel, COR.g1),
   janela: (c: CanvasRenderingContext2D, w: number, h: number) => {
     retangulo(c, 0, 0, w, h, 36, COR.g2);
     retangulo(c, 0, 0, w, 70, 0, COR.g3);
@@ -163,8 +228,9 @@ const gradienteRadial = (cor: string, opacidade: number) =>
 // A logo usa quatro cores chapadas: corpo #0FDF5C (lado da luz) e #21AF56 (lado da sombra),
 // base #00FF5F (luz) e #0DD357 (sombra). Aqui cada faceta recebe uma dessas cores, sem gradiente:
 // se a faceta aponta para a esquerda da camera, fica com a cor clara; para a direita, com a escura.
-// Ao girar, as facetas trocam de cor na divisao, e o simbolo se comporta como um objeto solido lapidado.
-const FACETAS = 18;
+// Cada faceta ainda ganha um leve degrau de tom conforme o angulo, chapado na face inteira: assim as
+// arestas entre facetas ficam visiveis e o giro do simbolo se le, sem virar luz suave.
+const FACETAS = 12;
 const CRISTAL = {
   corpo: { luz: 0x0fdf5c, sombra: 0x21af56 },
   base: { luz: 0x00ff5f, sombra: 0x0dd357 },
@@ -190,7 +256,10 @@ function materialCristal(cores: { luz: number; sombra: number }) {
       void main() {
         // Normal da faceta, constante em cada face (sombreamento chapado).
         vec3 n = normalize(cross(dFdx(vPos), dFdy(vPos)));
-        gl_FragColor = vec4(n.x < 0.0 ? luz : sombra, 1.0);
+        vec3 cor = n.x < 0.0 ? luz : sombra;
+        // Degrau de tom por faceta: mais claro de frente para a camera, mais escuro perto do contorno.
+        cor *= 0.8 + 0.2 * abs(n.z);
+        gl_FragColor = vec4(cor, 1.0);
         #include <colorspace_fragment>
       }
     `,
@@ -332,6 +401,11 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
   const celular = cartao("celular", 0.52, 1.0, 0.07, 0xd9d9d9, 256);
   const grafico = cartao("grafico", 0.98, 0.72, 0.08, COR.g2);
   const ia = cartao("ia", 0.5, 0.5, 0.22, COR.g3, 256);
+  // Cards com icones: pessoas, robos, metricas e web
+  const pessoas = cartao("pessoas", 0.56, 0.56, 0.14, 0xd9d9d9, 256);
+  const robos = cartao("robos", 0.56, 0.56, 0.14, COR.g3, 256);
+  const metricas = cartao("metricas", 0.56, 0.56, 0.14, COR.g2, 256);
+  const web = cartao("web", 0.56, 0.56, 0.14, 0xd9d9d9, 256);
 
   // Camadas de produto: tres placas empilhadas que respiram
   const camadas = new THREE.Group();
@@ -354,6 +428,10 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     [ia, 0, Math.PI + 1.5],
     [celular, 2, 0.9],
     [camadas, 2, Math.PI + 0.9],
+    [pessoas, 1, 1.85],
+    [robos, 0, 3.0],
+    [metricas, 2, 2.5],
+    [web, 1, 5.0],
   ];
   distribuir.forEach(([objeto, indice, fase], i) => {
     raiz.add(objeto);
@@ -430,7 +508,7 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     // Simbolo: entra subindo e depois flutua, com um balanco lento.
     const e = saida(t / 1.4);
     simbolo.position.y = -0.55 - (1 - e) * 0.6 + Math.sin(t * 0.7) * 0.06;
-    simbolo.rotation.y = t * 0.35; // giro lento: as facetas passam pela divisao de luz e sombra
+    simbolo.rotation.y = t * 0.5; // giro lento: as facetas passam pela divisao de luz e sombra
     simbolo.rotation.z = Math.sin(t * 0.45) * 0.035;
     simbolo.rotation.x = Math.cos(t * 0.38) * 0.03;
     const s = escala * (0.85 + 0.15 * e);
