@@ -760,18 +760,21 @@ button {
 
 .client {
   display: grid;
+  height: 100%;
   min-height: 104px;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface);
+  /* Curva sem ultrapassagem e duracao mais longa: subida e descida suaves, sem quique */
   transition:
-    transform var(--spring-duration) var(--spring),
-    border-color 0.25s var(--ease),
-    background-color 0.25s var(--ease);
+    transform 0.5s var(--ease),
+    border-color 0.4s var(--ease),
+    background-color 0.4s var(--ease);
 }
 
-/* Como os cards da proposta: leve subida com mola e borda mais clara no hover */
-.client:hover {
+/* Leve subida e borda mais clara no hover ou no foco do link */
+.client:hover,
+.client:has(a:focus-visible) {
   transform: translateY(-3px);
   border-color: var(--line-strong);
   background: var(--surface-2);
@@ -798,7 +801,7 @@ button {
   object-fit: contain;
   margin: auto;
   opacity: 0.8;
-  transition: opacity 0.25s var(--ease);
+  transition: opacity 0.4s var(--ease);
 }
 
 .client > img {
@@ -808,7 +811,8 @@ button {
   max-width: min(calc(100% - 56px), 150px);
 }
 
-.client:hover img {
+.client:hover img,
+.client:has(a:focus-visible) img {
   opacity: 1;
 }
 

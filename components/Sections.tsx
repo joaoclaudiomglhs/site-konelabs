@@ -164,16 +164,20 @@ export function Clientes() {
         <SectionHead tag="Clientes" id="clientes-title" titulo="Marcas que confiam no nosso trabalho" />
         <RevealGroup as="ul" className="clients-grid">
           {clientes.map((c) => (
-            <RevealItem as="li" key={c.nome} className="client">
-              {c.url ? (
-                <a href={c.url} target="_blank" rel="noreferrer" aria-label={`${c.nome}, abre o site em nova aba`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={c.logo} alt="" loading="lazy" />
-                </a>
-              ) : (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={c.logo} alt={c.nome} loading="lazy" />
-              )}
+            // O RevealItem cuida so da entrada; o hover fica no .client interno,
+            // para a transicao de CSS nao disputar o transform com o Motion.
+            <RevealItem as="li" key={c.nome}>
+              <div className="client">
+                {c.url ? (
+                  <a href={c.url} target="_blank" rel="noreferrer" aria-label={`${c.nome}, abre o site em nova aba`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={c.logo} alt="" loading="lazy" />
+                  </a>
+                ) : (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.logo} alt={c.nome} loading="lazy" />
+                )}
+              </div>
             </RevealItem>
           ))}
         </RevealGroup>
