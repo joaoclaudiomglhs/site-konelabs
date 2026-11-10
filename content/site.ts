@@ -265,4 +265,5 @@ export const chamadaContato = {
 export const rodape = {
   assinatura: "Konelabs® desde 2018",
   lema: "Makers gonna make",
+  cnpj: "31.249.727/0001-30",
 };
