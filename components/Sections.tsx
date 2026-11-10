@@ -1,5 +1,8 @@
+import Link from "next/link";
 import {
+  ArrowRight,
   CalendarClock,
+  ChevronDown,
   Cpu,
   Factory,
   HeartPulse,
@@ -86,12 +89,25 @@ export function Hero() {
           </RevealItem>
           <RevealItem className="hero-bottom">
             <p className="lead">{hero.apoio}</p>
+            <div className="hero-actions">
+              <Link className="btn btn-primary" href="/projetos">
+                Ver projetos
+                <ArrowRight className="btn-icon icon-right" size={18} aria-hidden="true" />
+              </Link>
+            </div>
           </RevealItem>
         </div>
         <RevealItem className="hero-art-wrap">
           <HeroArt />
         </RevealItem>
       </RevealGroup>
+      {/* Indicador de rolagem, como na capa da proposta comercial: mouse com ponto que desce e seta que pulsa */}
+      <a className="scroll-cue" href="#servicos" aria-label="Rolar para os serviços">
+        <span className="scroll-mouse" aria-hidden="true">
+          <i />
+        </span>
+        <ChevronDown className="scroll-chev" size={18} aria-hidden="true" />
+      </a>
     </section>
   );
 }

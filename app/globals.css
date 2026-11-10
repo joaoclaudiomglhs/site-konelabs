@@ -463,7 +463,7 @@ button {
 /* Texto a esquerda e ilustracao interativa a direita; abaixo de 1000px a ilustracao desce */
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(32px, 5vw, 72px);
 }
@@ -474,7 +474,7 @@ button {
 
 .hero-art {
   width: 100%;
-  max-width: 540px;
+  max-width: 680px;
   margin-inline: auto;
   touch-action: pan-y;
 }
@@ -491,7 +491,7 @@ button {
     grid-template-columns: minmax(0, 1fr);
   }
   .hero-art {
-    max-width: 380px;
+    max-width: 520px;
   }
 }
 
@@ -515,6 +515,76 @@ button {
   margin-top: clamp(40px, 6vw, 72px);
   padding-top: 32px;
   border-top: 1px solid var(--line);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+/* Indicador de rolagem do hero, igual ao da proposta comercial */
+.scroll-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: max-content;
+  margin: clamp(32px, 5vw, 56px) auto 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-control);
+  color: var(--text-muted);
+  transition: color 0.25s var(--ease);
+}
+
+.scroll-cue:hover,
+.scroll-cue:focus-visible {
+  color: var(--text);
+}
+
+.scroll-mouse {
+  display: block;
+  position: relative;
+  width: 24px;
+  height: 38px;
+  border: 2px solid currentColor;
+  border-radius: 14px;
+}
+
+.scroll-mouse i {
+  position: absolute;
+  left: 50%;
+  top: 7px;
+  width: 4px;
+  height: 8px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: var(--accent);
+  animation: cue-dot 1.8s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+}
+
+.scroll-chev {
+  animation: cue-chev 1.8s ease-in-out infinite;
+}
+
+@keyframes cue-dot {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  70% { opacity: 1; transform: translateY(12px); }
+  100% { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes cue-chev {
+  0%, 100% { opacity: 0.35; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-mouse i,
+  .scroll-chev {
+    animation: none;
+  }
 }
 
 .hero-bottom .lead {
@@ -1153,7 +1223,7 @@ button {
 
 .project-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   gap: clamp(32px, 5vw, 80px);
   margin-top: 48px;
   padding-top: 32px;

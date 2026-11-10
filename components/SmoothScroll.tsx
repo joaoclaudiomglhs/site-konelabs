@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
-// Rolagem suave com inercia. Desligada quando o usuario prefere menos movimento.
+// Rolagem suave com inercia, no mesmo ritmo da proposta comercial (lerp 0.14). Desligada quando o usuario prefere menos movimento.
 // A cada troca de pagina, volta ao topo imediatamente (sem animar), a menos que a URL tenha uma ancora.
 export default function SmoothScroll() {
   const lenisRef = useRef<Lenis | null>(null);
@@ -13,7 +13,7 @@ export default function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const lenis = new Lenis({ lerp: 0.1 });
+    const lenis = new Lenis({ lerp: 0.14 });
     lenisRef.current = lenis;
     let frame = 0;
     const raf = (time: number) => {
