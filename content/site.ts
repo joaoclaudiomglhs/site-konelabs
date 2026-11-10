@@ -11,11 +11,13 @@ export const contato = {
 };
 
 export const nav = [
-  { href: "/#servicos", label: "Serviços" },
-  { href: "/#projetos", label: "Projetos" },
-  { href: "/#sobre", label: "Sobre" },
-  { href: "/#faq", label: "FAQ" },
+  { href: "/servicos", label: "Serviços" },
+  { href: "/projetos", label: "Projetos" },
+  { href: "/sobre", label: "Sobre" },
 ];
+
+// Rodape: todas as paginas proprias, para navegacao e rastreamento.
+export const navRodape = [...nav, { href: "/contato", label: "Contato" }];
 
 export const hero = {
   // As palavras em "destaques" aparecem em verde dentro do titulo.

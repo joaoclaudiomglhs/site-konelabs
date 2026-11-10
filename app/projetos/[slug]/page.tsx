@@ -100,7 +100,7 @@ export default async function ProjetoPage({ params }: Params) {
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Início", item: `${siteUrl}/` },
-          { "@type": "ListItem", position: 2, name: "Projetos", item: `${siteUrl}/#projetos` },
+          { "@type": "ListItem", position: 2, name: "Projetos", item: `${siteUrl}/projetos` },
           { "@type": "ListItem", position: 3, name: p.nome, item: `${siteUrl}/projetos/${p.slug}` },
         ],
       },
@@ -114,7 +114,7 @@ export default async function ProjetoPage({ params }: Params) {
         <div className="container">
           <RevealGroup>
             <RevealItem className="project-back">
-              <Link href="/#projetos" className="link-arrow">
+              <Link href="/projetos" className="link-arrow">
                 <ArrowLeft className="btn-icon icon-left" size={18} aria-hidden="true" />
                 Todos os projetos
               </Link>

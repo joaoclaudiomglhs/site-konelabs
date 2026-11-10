@@ -47,6 +47,10 @@ const iconesNumeros: Record<string, LucideIcon> = {
   "layout-grid": LayoutGrid,
 };
 
+// Nas paginas proprias (/servicos, /sobre, /projetos, /contato) o titulo vira H1 no PageHero,
+// e a secao e renderizada com cabecalho={false} para nao repetir o titulo.
+type SecaoProps = { cabecalho?: boolean };
+
 function SectionHead({ tag, id, titulo, apoio }: { tag: string; id: string; titulo: string; apoio?: string }) {
   return (
     <RevealGroup className="section-head">
@@ -98,16 +102,16 @@ export function Hero() {
   );
 }
 
-export function Servicos() {
+export const servicosCabecalho = {
+  titulo: "Do primeiro esboço ao produto em evolução",
+  apoio: "Atuamos onde o seu negócio precisa de clareza: no site, no produto, no código ou no time.",
+};
+
+export function Servicos({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="servicos" aria-labelledby="servicos-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="servicos" aria-labelledby={cabecalho ? "servicos-title" : undefined} aria-label={cabecalho ? undefined : "Lista de serviços"}>
       <div className="container">
-        <SectionHead
-          tag="Serviços"
-          id="servicos-title"
-          titulo="Do primeiro esboço ao produto em evolução"
-          apoio="Atuamos onde o seu negócio precisa de clareza: no site, no produto, no código ou no time."
-        />
+        {cabecalho && <SectionHead tag="Serviços" id="servicos-title" titulo={servicosCabecalho.titulo} apoio={servicosCabecalho.apoio} />}
         <RevealGroup as="ul" className="services-list">
           {servicos.map((s) => {
             return (
@@ -136,11 +140,11 @@ export function Servicos() {
   );
 }
 
-export function Projetos() {
+export function Projetos({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="projetos" aria-labelledby="projetos-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="projetos" aria-labelledby={cabecalho ? "projetos-title" : undefined} aria-label={cabecalho ? undefined : "Lista de projetos"}>
       <div className="container">
-        <SectionHead tag="Projetos 2024 a 2026" id="projetos-title" titulo="Trabalhos selecionados" />
+        {cabecalho && <SectionHead tag="Projetos 2024 a 2026" id="projetos-title" titulo="Trabalhos selecionados" />}
         <RevealGroup as="ul" className="works-grid">
           {projetos.map((p) => (
             <RevealItem as="li" key={p.slug}>
@@ -178,12 +182,12 @@ export function Clientes() {
   );
 }
 
-export function Sobre() {
+export function Sobre({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="sobre" aria-labelledby="sobre-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="sobre" aria-labelledby={cabecalho ? "sobre-title" : undefined} aria-label={cabecalho ? undefined : "Números e setores"}>
       <div className="container about-grid">
         <div>
-          <SectionHead tag="Sobre" id="sobre-title" titulo={sobre.titulo} apoio={sobre.texto} />
+          {cabecalho && <SectionHead tag="Sobre" id="sobre-title" titulo={sobre.titulo} apoio={sobre.texto} />}
           <RevealGroup className="stats">
             {sobre.numeros.map((n) => {
               const Icone = iconesNumeros[n.icone];
@@ -227,10 +231,11 @@ export function Faq() {
   );
 }
 
-export function Contato() {
+export function Contato({ cabecalho = true }: SecaoProps) {
   return (
-    <section className="section" id="contato" aria-labelledby="contato-title">
+    <section className={cabecalho ? "section" : "section section-page"} id="contato" aria-labelledby={cabecalho ? "contato-title" : undefined} aria-label={cabecalho ? undefined : "Canais de contato"}>
       <div className="container">
+        {cabecalho && (
         <RevealGroup className="section-head">
           <RevealItem>
             <p className="tag">Contato</p>
@@ -244,6 +249,7 @@ export function Contato() {
             <p className="lead">{chamadaContato.texto}</p>
           </RevealItem>
         </RevealGroup>
+        )}
 
         <RevealGroup className="contact-grid">
           <RevealItem className="contact-item card-raised">
