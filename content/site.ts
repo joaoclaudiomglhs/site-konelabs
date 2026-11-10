@@ -21,7 +21,7 @@ export const navRodape = [...nav, { href: "/contato", label: "Contato" }];
 
 export const hero = {
   // As palavras em "destaques" aparecem em verde dentro do titulo.
-  titulo: "Estratégia, design e tecnologia que despertam desejo, geram confiança e destravam crescimento.",
+  titulo: "Estratégia, design e tecnologia que geram confiança e crescimento.",
   destaques: ["Estratégia", "confiança", "crescimento"],
   apoio:
     "Criamos sites e produtos que posicionam a marca, conquistam quem visita e transformam visitantes em clientes.",
