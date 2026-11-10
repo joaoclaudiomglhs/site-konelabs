@@ -467,29 +467,102 @@ button {
 
 .service {
   display: grid;
-  grid-template-columns: 56px 72px minmax(0, 1fr) minmax(0, 300px);
-  gap: 24px;
+  grid-template-columns: 168px minmax(0, 1fr) minmax(0, 300px);
+  gap: 32px;
+  align-items: start;
   padding-block: clamp(28px, 4vw, 44px);
 }
 
-.service-num {
-  font: 700 20px/1.2 var(--font-mono);
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-  padding-top: 2px;
-}
-
-.service-icon {
+/* Ilustracao 3D isometrica do servico (components/ServiceArt.tsx) */
+.service-art {
   display: block;
-  color: var(--accent);
+  width: 168px;
+  height: auto;
+  overflow: visible;
+  margin-top: -12px;
 }
 
-.service-icon svg {
+/* Movimento das ilustracoes: lento, discreto, so transform e opacity, defasado entre elementos */
+.art-bob {
+  animation: art-bob 6s ease-in-out infinite;
+}
+
+.art-pulse {
+  animation: art-pulse 3s ease-in-out infinite;
+}
+
+.art-blink {
+  animation: art-blink 1.1s steps(2, jump-none) infinite;
+}
+
+.art-slide {
+  animation: art-slide 4s ease-in-out infinite;
+}
+
+.art-flow {
+  animation: art-flow 1.6s linear infinite;
+}
+
+.art-delay-1 {
+  animation-delay: -2s;
+}
+
+.art-delay-2 {
+  animation-delay: -4s;
+}
+
+@keyframes art-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes art-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes art-blink {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes art-slide {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes art-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+/* No hover do servico, a ilustracao ganha um leve deslocamento para cima, com mola */
+.service .service-art {
   transition: transform var(--spring-duration) var(--spring);
 }
 
-.service:hover .service-icon svg {
-  transform: translateY(-3px);
+.service:hover .service-art {
+  transform: translateY(-4px);
 }
 
 .service h3 {
@@ -521,10 +594,10 @@ button {
 
 @media (max-width: 1000px) {
   .service {
-    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-columns: 140px minmax(0, 1fr);
   }
-  .service-num {
-    display: none;
+  .service-art {
+    width: 140px;
   }
   .service-apps-wrap {
     grid-column: 2;
@@ -534,7 +607,11 @@ button {
 @media (max-width: 560px) {
   .service {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
+  }
+  .service-art {
+    width: 136px;
+    margin-top: 0;
   }
   .service-apps-wrap {
     grid-column: auto;
@@ -587,10 +664,8 @@ button {
 }
 
 .work-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 16px;
+  display: grid;
+  gap: 6px;
 }
 
 .work-info h3 {
@@ -599,37 +674,24 @@ button {
 }
 
 .work-meta {
-  margin-top: 6px;
   font-size: 14px;
   color: var(--text-muted);
 }
 
-.work-arrow {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-control);
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--accent);
-  transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+/* Hover do projeto: borda verde na moldura da capa, junto com o zoom da imagem */
+.work-cover {
+  transition: border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
 
-.work-arrow svg {
-  transition: transform var(--spring-duration) var(--spring);
-}
-
-.work-card:hover .work-arrow,
-.work-card:focus-visible .work-arrow {
+.work-card:hover .work-cover,
+.work-card:focus-visible .work-cover {
   border-color: var(--accent);
-  color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
-.work-card:hover .work-arrow svg,
-.work-card:focus-visible .work-arrow svg {
-  transform: translate(2px, -2px);
+.work-card:hover h3,
+.work-card:focus-visible h3 {
+  color: var(--text);
 }
 
 @media (max-width: 720px) {
@@ -773,17 +835,15 @@ button {
 .sectors li {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   padding-block: 16px;
   border-bottom: 1px solid var(--line);
   font-size: 18px;
 }
 
-.sectors li span:last-child {
-  font: 700 13px var(--font-mono);
+.sector-icon {
+  flex: none;
   color: var(--accent);
-  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 860px) {
@@ -814,25 +874,32 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
-.faq-item:first-child {
+.faq-list > :first-child .faq-item {
   border-top: 1px solid var(--line);
 }
 
-.faq-item summary {
+.faq-q {
+  margin: 0;
+  font: inherit;
+  letter-spacing: normal;
+}
+
+.faq-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  width: 100%;
   min-height: 72px;
-  padding-block: 20px;
+  padding: 20px 0;
+  border: 0;
+  background: none;
+  text-align: left;
   font-size: clamp(17px, 1.7vw, 19px);
   font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
   cursor: pointer;
-  list-style: none;
-}
-
-.faq-item summary::-webkit-details-marker {
-  display: none;
 }
 
 .faq-icon {
@@ -845,17 +912,22 @@ button {
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--accent);
-  transition: transform 0.4s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
+  transition: border-color 0.3s var(--ease);
 }
 
-.faq-item[open] .faq-icon {
-  transform: rotate(45deg);
+.faq-item[data-open="true"] .faq-icon,
+.faq-summary:hover .faq-icon {
   border-color: var(--accent);
-  color: var(--accent);
 }
 
-.faq-item summary:hover .faq-icon {
-  border-color: var(--accent);
+.faq-icon-glyph {
+  display: grid;
+  place-items: center;
+}
+
+/* Altura animada pelo Framer Motion; overflow escondido durante a transicao */
+.faq-panel {
+  overflow: hidden;
 }
 
 .faq-answer {
@@ -1189,5 +1261,13 @@ button {
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+  /* Ilustracoes ficam em repouso */
+  .art-bob,
+  .art-pulse,
+  .art-blink,
+  .art-slide,
+  .art-flow {
+    animation: none !important;
   }
 }

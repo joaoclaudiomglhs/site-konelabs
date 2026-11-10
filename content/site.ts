@@ -212,45 +212,47 @@ export const sobre = {
     { valor: "Brasil", rotulo: "clientes em todo o país", icone: "map-pin" },
     { valor: String(projetos.length), rotulo: "projetos em destaque", icone: "layout-grid" },
   ],
+  // icone: nome do icone Lucide do setor (mapeado em components/Sections.tsx).
   setores: [
-    "Saúde",
-    "Finanças e fintechs",
-    "Logística e comércio exterior",
-    "Varejo e e-commerce",
-    "Indústria",
-    "Tecnologia e serviços",
+    { nome: "Saúde", icone: "heart-pulse" },
+    { nome: "Finanças e fintechs", icone: "landmark" },
+    { nome: "Logística e comércio exterior", icone: "ship" },
+    { nome: "Varejo e e-commerce", icone: "shopping-bag" },
+    { nome: "Indústria", icone: "factory" },
+    { nome: "Tecnologia e serviços", icone: "cpu" },
   ],
 };
 
 export const faq = {
   titulo: "Antes de contratar, entenda como funciona",
   apoio: "Reunimos as perguntas que mais ouvimos de quem está começando um projeto com a gente.",
+  // Textos reescritos em 2026-11: mesmo sentido, outras palavras.
   itens: [
     {
-      p: "Quanto tempo leva para criar meu site ou produto digital?",
-      r: "Depende do tamanho e da complexidade do projeto. Depois da primeira conversa, quando o escopo está claro, passamos um prazo realista e as etapas até a entrega.",
+      p: "Em quanto tempo meu site ou produto digital fica pronto?",
+      r: "Varia conforme o tamanho e a complexidade do projeto. Assim que o escopo fica definido, logo depois da primeira conversa, apresentamos um prazo realista e cada etapa até a entrega.",
     },
     {
-      p: "Que tipo de projeto a Konelabs faz?",
-      r: "Sites institucionais, landing pages, one pages, e-commerce, blogs, portais e hotsites. Também criamos e evoluímos produtos digitais, como SaaS, aplicativos, plataformas, sistemas internos, interfaces de autocompra e totens, além de consultoria para times de produto e design.",
+      p: "Quais projetos a Konelabs desenvolve?",
+      r: "Criamos sites institucionais, landing pages, one pages, lojas virtuais, blogs, portais e hotsites. Também desenhamos e evoluímos produtos digitais, como SaaS, aplicativos, plataformas, sistemas internos, interfaces de autocompra e totens. E oferecemos consultoria para times de produto e design.",
     },
     {
-      p: "Como funciona o processo?",
-      r: "O trabalho é colaborativo e dividido em etapas. Começamos alinhando objetivo, entregas e prazos. Depois o projeto avança fase a fase, e cada etapa é validada com você antes de seguir para a próxima.",
+      p: "Como o trabalho acontece na prática?",
+      r: "Trabalhamos junto com você, em etapas. Primeiro definimos objetivo, entregas e prazos. A partir daí o projeto avança fase por fase, e você aprova cada etapa antes de passarmos para a seguinte.",
     },
     {
-      p: "O que eu preciso ter para começar?",
-      r: "Um objetivo ou um problema a resolver. Na primeira conversa entendemos o contexto do negócio e o que você precisa, e depois enviamos uma proposta direta, com escopo, prazo e investimento.",
-    },
-    {
-      // Confirmar com o Joca: promessa comercial.
-      p: "Depois da entrega, o projeto é meu?",
-      r: "Sim. Os arquivos finais passam a ser seus após o pagamento, com a documentação de design e de implementação necessária para que o seu time continue o trabalho. Seguir com a Konelabs depois disso é uma escolha, não uma obrigação.",
+      p: "Do que eu preciso para começar?",
+      r: "Basta um objetivo ou um problema que você quer resolver. No primeiro encontro entendemos o contexto do seu negócio e as suas necessidades. Em seguida enviamos uma proposta objetiva, com escopo, prazo e investimento.",
     },
     {
       // Confirmar com o Joca: promessa comercial.
-      p: "Vocês atendem projetos com prazo urgente?",
-      r: "Quando faz sentido, sim. Priorizamos a qualidade da entrega, então em casos urgentes explicamos o que muda no escopo e no resultado para decidirmos juntos o melhor caminho.",
+      p: "O projeto fica comigo depois da entrega?",
+      r: "Fica. Após o pagamento, os arquivos finais são seus, junto com a documentação de design e de implementação que o seu time precisa para dar continuidade. Continuar com a Konelabs depois disso é uma opção, não um compromisso.",
+    },
+    {
+      // Confirmar com o Joca: promessa comercial.
+      p: "É possível atender um projeto com prazo apertado?",
+      r: "Quando faz sentido, sim. A qualidade da entrega vem primeiro, então em casos urgentes mostramos o que muda no escopo e no resultado, e decidimos juntos o melhor caminho.",
     },
   ],
 };

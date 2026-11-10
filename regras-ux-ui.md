@@ -54,6 +54,13 @@ Documento único com todas as regras de interface, experiência e motion para pr
 - No site, as tags continuam antes dos H2, no estilo de tag da proposta: pílula com borda #2B2B2B, ponto verde e texto em Space Mono 12px, caixa alta, cinza.
 - Usar capitalização de frase por padrão e evitar texto todo em caixa alta, exceto rótulos pequenos de apoio.
 
+### Sem numeração de itens
+
+- Nunca enumerar tópicos de nenhuma forma: nada de 01, 02, 03, 1., 2., (a), (b) ou contadores em listas, menus, serviços, setores, etapas, cards ou índices.
+- Para dar ritmo ou identidade a uma lista, usar ícone Lucide, ilustração, divisores finos ou hierarquia tipográfica, nunca número de ordem.
+- Listas ordenadas em HTML (ol) só quando a ordem for essencial para a tarefa, e mesmo assim sem exibir o número.
+- Números continuam permitidos quando são dado real (anos, prazos, quantidades, preços, resultados).
+
 ## 5. Ícones
 
 - Usar exclusivamente ícones da biblioteca Lucide.
@@ -68,6 +75,8 @@ Documento único com todas as regras de interface, experiência e motion para pr
 
 - Estados de hover nunca usam transformação de escala (scale), nem em foco ou estado pressionado.
 - Exceção: imagens de capa dentro de cards de projeto podem ter um zoom suave (até 4%) no hover e no foco do card. A imagem cresce dentro da própria moldura, que corta o excesso, então o card, o texto e os botões não mudam de tamanho. Animar com mola amortecida, sem oscilar, e desligar com prefers-reduced-motion.
+- Cards de projeto não têm seta: o hover e o foco mostram uma borda verde na moldura da capa, junto com o zoom da imagem.
+- Perguntas frequentes abrem e fecham com altura animada em mola e opacidade; só o sinal de mais gira, a moldura do ícone fica parada.
 - Usar deslocamento (translate), cor, fundo, borda ou sombra.
 - Manter estados claros: padrão, hover, foco, ativo, pressionado, desabilitado, carregando, sucesso, erro, vazio e selecionado, quando aplicáveis.
 - Foco sempre visível.
@@ -167,7 +176,9 @@ Desenvolvimento:
 
 ## 15. Ilustrações com animação suave
 
-Aplicam-se a ilustrações de apoio em cards e seções (como as do Branding book e do Guia para execução + IA).
+Aplicam-se a ilustrações de apoio em cards e seções (como as do Branding book e do Guia para execução + IA) e às ilustrações 3D dos serviços no site.
+
+No site, cada serviço tem uma ilustração isométrica (3D) em SVG, sem biblioteca, no lugar do ícone: base em placa, volumes com topo mais claro e laterais mais escuras, cinzas da marca e verde em um ou dois detalhes. A mini animação usa flutuação de até 4px, pulso de opacidade no detalhe verde, cursor piscando ou linha tracejada em fluxo, com ciclos defasados. Com prefers-reduced-motion a ilustração fica em repouso.
 
 Estilo:
 - Estilo editorial plano, no espírito do Airbnb: formas arredondadas, poucos detalhes e composição clara. Sem contornos finos, gradientes pesados ou sombras realistas.
@@ -234,3 +245,4 @@ Sequência e animação:
 - Resultado de validação informado com honestidade.
 - Menu com blur no fundo, noise suave no fundo principal e cards de destaque em cinza mais claro.
 - Site e proposta comercial com os mesmos tokens, fontes (Inter e Space Mono), botões e cards.
+- Nenhum item enumerado em listas, menus, serviços, setores ou etapas.

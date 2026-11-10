@@ -1,18 +1,21 @@
 import {
-  Code,
-  Compass,
-  Layers,
+  CalendarClock,
+  Cpu,
+  Factory,
+  HeartPulse,
+  Landmark,
+  LayoutGrid,
   Mail,
   MapPin,
-  MonitorSmartphone,
   Phone,
-  Plus,
-  Users,
-  CalendarClock,
-  LayoutGrid,
+  Ship,
+  ShoppingBag,
+  type LucideIcon,
 } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import WorkCard from "@/components/WorkCard";
+import ServiceArt from "@/components/ServiceArt";
+import FaqList from "@/components/FaqList";
 import CopyEmail from "@/components/CopyEmail";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import {
@@ -24,19 +27,21 @@ import {
   projetos,
   servicos,
   sobre,
-  type Servico,
 } from "@/content/site";
 
-const icones: Record<Servico["icone"], typeof Code> = {
-  "monitor-smartphone": MonitorSmartphone,
-  compass: Compass,
-  layers: Layers,
-  code: Code,
-  users: Users,
+
+// Icones dos setores atendidos, um para cada setor.
+const iconesSetores: Record<string, LucideIcon> = {
+  "heart-pulse": HeartPulse,
+  landmark: Landmark,
+  ship: Ship,
+  "shopping-bag": ShoppingBag,
+  factory: Factory,
+  cpu: Cpu,
 };
 
 // Icones dos numeros da secao Sobre, como nos cards de "Quem somos" da proposta comercial.
-const iconesNumeros: Record<string, typeof Code> = {
+const iconesNumeros: Record<string, LucideIcon> = {
   "calendar-clock": CalendarClock,
   "map-pin": MapPin,
   "layout-grid": LayoutGrid,
@@ -105,14 +110,10 @@ export function Servicos() {
         />
         <RevealGroup as="ul" className="services-list">
           {servicos.map((s) => {
-            const Icon = icones[s.icone];
             return (
               <RevealItem as="li" key={s.id}>
                 <article className="service">
-                  <span className="service-num">{s.id}</span>
-                  <span className="service-icon" aria-hidden="true">
-                    <Icon size={36} strokeWidth={1.75} />
-                  </span>
+                  <ServiceArt tipo={s.icone} />
                   <div>
                     <h3>{s.titulo}</h3>
                     <p>{s.texto}</p>
@@ -199,12 +200,15 @@ export function Sobre() {
         <div>
           <p className="sectors-label label">Setores que atendemos</p>
           <RevealGroup as="ul" className="sectors">
-            {sobre.setores.map((s, i) => (
-              <RevealItem as="li" key={s}>
-                <span>{s}</span>
-                <span>{String(i + 1).padStart(2, "0")}</span>
-              </RevealItem>
-            ))}
+            {sobre.setores.map((s) => {
+              const Icone = iconesSetores[s.icone];
+              return (
+                <RevealItem as="li" key={s.nome}>
+                  {Icone && <Icone className="sector-icon" size={24} strokeWidth={1.75} aria-hidden="true" />}
+                  <span>{s.nome}</span>
+                </RevealItem>
+              );
+            })}
           </RevealGroup>
         </div>
       </div>
@@ -217,21 +221,7 @@ export function Faq() {
     <section className="section" id="faq" aria-labelledby="faq-title">
       <div className="container faq-grid">
         <SectionHead tag="FAQ" id="faq-title" titulo={faq.titulo} apoio={faq.apoio} />
-        <RevealGroup>
-          {faq.itens.map((f) => (
-            <RevealItem key={f.p}>
-              <details className="faq-item">
-                <summary>
-                  {f.p}
-                  <span className="faq-icon" aria-hidden="true">
-                    <Plus size={20} />
-                  </span>
-                </summary>
-                <p className="faq-answer">{f.r}</p>
-              </details>
-            </RevealItem>
-          ))}
-        </RevealGroup>
+        <FaqList itens={faq.itens} />
       </div>
     </section>
   );
