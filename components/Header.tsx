@@ -64,7 +64,7 @@ export default function Header() {
         {open && (
           <m.nav
             id="menu-mobile"
-            className="mobile-nav container"
+            className="mobile-nav"
             aria-label="Menu"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -80,8 +80,14 @@ export default function Header() {
                 </li>
               ))}
               <li>
-                <Link href="/contato" aria-current={isCurrent("/contato") ? "page" : undefined} onClick={() => setOpen(false)}>
+                <Link
+                  href="/contato"
+                  className="mobile-nav-cta"
+                  aria-current={isCurrent("/contato") ? "page" : undefined}
+                  onClick={() => setOpen(false)}
+                >
                   Vamos conversar
+                  <ArrowRight size={18} aria-hidden="true" />
                 </Link>
               </li>
             </ul>

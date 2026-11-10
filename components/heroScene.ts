@@ -159,6 +159,44 @@ const gradienteRadial = (cor: string, opacidade: number) =>
     c.fillRect(0, 0, w, h);
   });
 
+// ---------- Material de cristal ----------
+// A logo usa quatro cores chapadas: corpo #0FDF5C (lado da luz) e #21AF56 (lado da sombra),
+// base #00FF5F (luz) e #0DD357 (sombra). Aqui cada faceta recebe uma dessas cores, sem gradiente:
+// se a faceta aponta para a esquerda da camera, fica com a cor clara; para a direita, com a escura.
+// Ao girar, as facetas trocam de cor na divisao, e o simbolo se comporta como um objeto solido lapidado.
+const FACETAS = 18;
+const CRISTAL = {
+  corpo: { luz: 0x0fdf5c, sombra: 0x21af56 },
+  base: { luz: 0x00ff5f, sombra: 0x0dd357 },
+};
+
+function materialCristal(cores: { luz: number; sombra: number }) {
+  const luz = new THREE.Color(cores.luz);
+  const sombra = new THREE.Color(cores.sombra);
+  return new THREE.ShaderMaterial({
+    uniforms: { luz: { value: luz }, sombra: { value: sombra } },
+    vertexShader: /* glsl */ `
+      varying vec3 vPos;
+      void main() {
+        vec4 p = modelViewMatrix * vec4(position, 1.0);
+        vPos = p.xyz;
+        gl_Position = projectionMatrix * p;
+      }
+    `,
+    fragmentShader: /* glsl */ `
+      uniform vec3 luz;
+      uniform vec3 sombra;
+      varying vec3 vPos;
+      void main() {
+        // Normal da faceta, constante em cada face (sombreamento chapado).
+        vec3 n = normalize(cross(dFdx(vPos), dFdy(vPos)));
+        gl_FragColor = vec4(n.x < 0.0 ? luz : sombra, 1.0);
+        #include <colorspace_fragment>
+      }
+    `,
+  });
+}
+
 // ---------- Cena ----------
 export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
@@ -201,10 +239,11 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
   // Corpo e base sao duas pecas do mesmo contorno, com as duas cores principais do icone.
   const corte = contorno.findIndex((p) => p.y <= 131.2 - 126.348 + 0.001);
   // A LatheGeometry espera o perfil de baixo para cima; na ordem inversa as normais apontam para dentro.
-  const corpoGeo = new THREE.LatheGeometry(contorno.slice(0, corte + 1).reverse(), 160);
-  const baseGeo = new THREE.LatheGeometry(contorno.slice(corte).reverse(), 160);
-  const matCorpo = new THREE.MeshStandardMaterial({ color: COR.corpo, roughness: 0.22, metalness: 0, emissive: COR.corpo, emissiveIntensity: 0.5 });
-  const matBase = new THREE.MeshStandardMaterial({ color: COR.base, roughness: 0.2, metalness: 0, emissive: COR.base, emissiveIntensity: 0.55 });
+  // Poucas faces ao redor: cada face e um plano chapado, como as facetas de um cristal.
+  const corpoGeo = new THREE.LatheGeometry(contorno.slice(0, corte + 1).reverse(), FACETAS);
+  const baseGeo = new THREE.LatheGeometry(contorno.slice(corte).reverse(), FACETAS);
+  const matCorpo = materialCristal(CRISTAL.corpo);
+  const matBase = materialCristal(CRISTAL.base);
   const corpo = new THREE.Mesh(corpoGeo, matCorpo);
   const base = new THREE.Mesh(baseGeo, matBase);
   simbolo.add(corpo, base);
@@ -391,6 +430,7 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     // Simbolo: entra subindo e depois flutua, com um balanco lento.
     const e = saida(t / 1.4);
     simbolo.position.y = -0.55 - (1 - e) * 0.6 + Math.sin(t * 0.7) * 0.06;
+    simbolo.rotation.y = t * 0.35; // giro lento: as facetas passam pela divisao de luz e sombra
     simbolo.rotation.z = Math.sin(t * 0.45) * 0.035;
     simbolo.rotation.x = Math.cos(t * 0.38) * 0.03;
     const s = escala * (0.85 + 0.15 * e);
