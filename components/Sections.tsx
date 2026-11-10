@@ -9,6 +9,7 @@ import {
   Plus,
   Users,
   CalendarClock,
+  LayoutGrid,
 } from "lucide-react";
 import { RevealGroup, RevealItem } from "@/components/Reveal";
 import WorkCard from "@/components/WorkCard";
@@ -32,6 +33,13 @@ const icones: Record<Servico["icone"], typeof Code> = {
   layers: Layers,
   code: Code,
   users: Users,
+};
+
+// Icones dos numeros da secao Sobre, como nos cards de "Quem somos" da proposta comercial.
+const iconesNumeros: Record<string, typeof Code> = {
+  "calendar-clock": CalendarClock,
+  "map-pin": MapPin,
+  "layout-grid": LayoutGrid,
 };
 
 function SectionHead({ tag, id, titulo, apoio }: { tag: string; id: string; titulo: string; apoio?: string }) {
@@ -103,14 +111,14 @@ export function Servicos() {
                 <article className="service">
                   <span className="service-num">{s.id}</span>
                   <span className="service-icon" aria-hidden="true">
-                    <Icon size={30} strokeWidth={1.5} />
+                    <Icon size={36} strokeWidth={1.75} />
                   </span>
                   <div>
                     <h3>{s.titulo}</h3>
                     <p>{s.texto}</p>
                   </div>
                   <div className="service-apps-wrap">
-                    <p className="service-apps-label">Aplicações</p>
+                    <p className="service-apps-label label">Aplicações</p>
                     <ul className="service-apps">
                       {s.aplicacoes.map((a) => (
                         <li key={a}>{a}</li>
@@ -176,16 +184,20 @@ export function Sobre() {
         <div>
           <SectionHead tag="Sobre" id="sobre-title" titulo={sobre.titulo} apoio={sobre.texto} />
           <RevealGroup className="stats">
-            {sobre.numeros.map((n) => (
-              <RevealItem key={n.rotulo} className="stat card-raised">
-                <p className="stat-value">{n.valor}</p>
-                <p className="stat-label">{n.rotulo}</p>
-              </RevealItem>
-            ))}
+            {sobre.numeros.map((n) => {
+              const Icone = iconesNumeros[n.icone];
+              return (
+                <RevealItem key={n.rotulo} className="stat card-raised">
+                  {Icone && <Icone className="stat-icon" size={32} strokeWidth={1.75} aria-hidden="true" />}
+                  <p className="stat-value">{n.valor}</p>
+                  <p className="stat-label">{n.rotulo}</p>
+                </RevealItem>
+              );
+            })}
           </RevealGroup>
         </div>
         <div>
-          <p className="sectors-label">Setores que atendemos</p>
+          <p className="sectors-label label">Setores que atendemos</p>
           <RevealGroup as="ul" className="sectors">
             {sobre.setores.map((s, i) => (
               <RevealItem as="li" key={s}>
@@ -253,7 +265,7 @@ export function Contato() {
             </a>
           </RevealItem>
           <RevealItem className="contact-item">
-            <Mail className="contact-icon" size={32} strokeWidth={1.5} aria-hidden="true" />
+            <Mail className="contact-icon" size={32} strokeWidth={1.75} aria-hidden="true" />
             <p className="contact-label">E-mail</p>
             <a className="contact-value" href={`mailto:${contato.email}`}>
               {contato.email}
@@ -261,7 +273,7 @@ export function Contato() {
             <CopyEmail email={contato.email} />
           </RevealItem>
           <RevealItem className="contact-item">
-            <Phone className="contact-icon" size={32} strokeWidth={1.5} aria-hidden="true" />
+            <Phone className="contact-icon" size={32} strokeWidth={1.75} aria-hidden="true" />
             <p className="contact-label">Telefone</p>
             <a className="contact-value" href={`tel:${contato.telefone.replace(/[^+\d]/g, "")}`}>
               {contato.telefone}

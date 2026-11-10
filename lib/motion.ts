@@ -11,4 +11,4 @@ export const springHover: Transition = { type: "spring", stiffness: 120, damping
 export const springUi: Transition = { type: "spring", stiffness: 380, damping: 34 };
 
 // Intervalo entre itens relacionados na entrada escalonada.
-export const staggerStep = 0.08;
+export const staggerStep = 0.07;

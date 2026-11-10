@@ -207,9 +207,10 @@ export const sobre = {
   texto:
     "Criamos soluções para marcas que lideram o seu mercado, unindo design, tecnologia e inovação. Atuamos com transformação digital potencializada com IA, com clientes em todo o Brasil.",
   numeros: [
-    { valor: "+8 anos", rotulo: "de história, desde 2018" },
-    { valor: "Brasil", rotulo: "clientes em todo o país" },
-    { valor: String(projetos.length), rotulo: "projetos em destaque" },
+    // icone: nome do icone Lucide mostrado acima do numero (mapeado em components/Sections.tsx).
+    { valor: "+8 anos", rotulo: "de história, desde 2018", icone: "calendar-clock" },
+    { valor: "Brasil", rotulo: "clientes em todo o país", icone: "map-pin" },
+    { valor: String(projetos.length), rotulo: "projetos em destaque", icone: "layout-grid" },
   ],
   setores: [
     "Saúde",

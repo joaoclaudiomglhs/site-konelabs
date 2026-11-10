@@ -42,7 +42,7 @@ export default function Header() {
         </nav>
 
         <div className="header-actions">
-          <a className="btn btn-primary" href="/#contato">
+          <a className="btn" href="/#contato">
             Vamos conversar
             <ArrowRight className="btn-icon icon-right" size={18} aria-hidden="true" />
           </a>
