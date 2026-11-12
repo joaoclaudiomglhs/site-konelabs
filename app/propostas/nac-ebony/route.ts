@@ -19,12 +19,12 @@ export async function GET(request: Request) {
     return NextResponse.redirect(new URL(propostaAcesso, request.url), { status: 303, headers: cabecalhosPrivados });
   }
 
-  // O HTML aponta para o PDF com caminho relativo; aqui ele passa a apontar para a rota protegida.
+  // O HTML aponta para o PDF com caminho relativo (o nome muda entre versoes); aqui ele passa a apontar para a rota protegida.
   // A proposta e um HTML grande: a tela de carregamento cobre a pagina ate ela terminar de carregar.
   const html = comCarregamento(
     (await lerArquivoProposta("index.html"))
       .toString("utf8")
-      .replaceAll('href="proposta-slides.pdf"', `href="${propostaCaminho}/proposta-slides.pdf"`),
+      .replace(/href="[^"/:#]+\.pdf"/g, `href="${propostaCaminho}/proposta-slides.pdf"`),
   );
 
   return new NextResponse(html, {
