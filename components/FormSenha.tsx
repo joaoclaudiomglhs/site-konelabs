@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { ArrowRight, Eye, EyeOff, LoaderCircle } from "lucide-react";
-import type { EstadoAcesso } from "@/app/propostas/nac-ebony/acesso/actions";
+import type { EstadoAcesso } from "@/lib/propostaAcoes";
 
 export default function FormSenha({
   acao,

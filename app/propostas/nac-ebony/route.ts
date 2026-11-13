@@ -1,33 +1,7 @@
-import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
-import {
-  cabecalhosPrivados,
-  lerArquivoProposta,
-  propostaAcesso,
-  propostaCaminho,
-  propostaCookie,
-  tokenValido,
-} from "@/lib/proposta";
-import { comCarregamento } from "@/lib/carregamento";
+import { responderProposta } from "@/lib/propostaRotas";
 
 export const dynamic = "force-dynamic";
 
-// Entrega a proposta em HTML so com o cookie de acesso; sem ele, leva para a tela de senha.
-export async function GET(request: Request) {
-  const loja = await cookies();
-  if (!tokenValido(loja.get(propostaCookie)?.value)) {
-    return NextResponse.redirect(new URL(propostaAcesso, request.url), { status: 303, headers: cabecalhosPrivados });
-  }
-
-  // O HTML aponta para o PDF com caminho relativo (o nome muda entre versoes); aqui ele passa a apontar para a rota protegida.
-  // A proposta e um HTML grande: a tela de carregamento cobre a pagina ate ela terminar de carregar.
-  const html = comCarregamento(
-    (await lerArquivoProposta("index.html"))
-      .toString("utf8")
-      .replace(/href="[^"/:#]+\.pdf"/g, `href="${propostaCaminho}/proposta-slides.pdf"`),
-  );
-
-  return new NextResponse(html, {
-    headers: { ...cabecalhosPrivados, "Content-Type": "text/html; charset=utf-8" },
-  });
+export function GET(request: Request) {
+  return responderProposta("nac-ebony", request);
 }
