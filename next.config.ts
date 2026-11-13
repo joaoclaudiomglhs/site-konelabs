@@ -5,12 +5,17 @@ const nextConfig: NextConfig = {
   // Arquivos cifrados das propostas, lidos pelas rotas em app/propostas no servidor.
   outputFileTracingIncludes: {
     "/propostas/**": ["./conteudo-privado/**"],
+    "/nac-ebony-completa/**": ["./conteudo-privado/**"],
   },
   // Propostas nunca entram em buscadores.
   async headers() {
     return [
       {
         source: "/propostas/:caminho*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }],
+      },
+      {
+        source: "/nac-ebony-completa/:caminho*",
         headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }],
       },
     ];
