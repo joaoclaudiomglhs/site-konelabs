@@ -7,6 +7,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
+import BgBeams from "@/components/BgBeams";
 import MotionProvider from "@/components/MotionProvider";
 import { hero } from "@/content/site";
 import { ogImagem, siteNome, siteTitulo, siteUrl } from "@/lib/site";
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR">
       <body>
+        <BgBeams />
         <a className="skip-link" href="#conteudo">
           Pular para o conteúdo
         </a>

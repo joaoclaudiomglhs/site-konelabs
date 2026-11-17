@@ -62,7 +62,8 @@ html.lenis body {
 body {
   margin: 0;
   min-height: 100dvh;
-  background: var(--bg);
+  /* Transparente para o fundo animado (.bg-beams) aparecer; a cor base fica no html. */
+  background: transparent;
   color: var(--text);
   font-family: var(--font);
   font-size: 16px;
@@ -71,6 +72,25 @@ body {
   text-rendering: optimizeLegibility;
   position: relative;
   isolation: isolate;
+}
+
+/* Fundo da proposta comercial (components/BgBeams.tsx): feixes de luz com dithering, atras de tudo. */
+.bg-beams {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  display: block;
+}
+
+@media print {
+  .bg-beams {
+    display: none;
+  }
 }
 
 /* Noise suave sobre o fundo principal. Fica atras do conteudo e nao recebe cliques. */

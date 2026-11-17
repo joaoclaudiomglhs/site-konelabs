@@ -356,7 +356,8 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
   const aneis = orbitas.map((o, i) => {
     const pts = new THREE.EllipseCurve(0, 0, o.raio, o.raio, 0, Math.PI * 2).getPoints(220).map((p) => new THREE.Vector3(p.x, 0, p.y));
     const geo = new THREE.BufferGeometry().setFromPoints(pts);
-    const mat = new THREE.LineDashedMaterial({ color: i === 1 ? 0x4a4a4a : COR.g3, dashSize: 0.07, gapSize: 0.09, transparent: true, opacity: 0.9 });
+    // Linhas cinza #6B6B6B (guidelines, secao 15.1), opacas para nao tingirem de verde sobre o simbolo.
+    const mat = new THREE.LineDashedMaterial({ color: COR.g4, dashSize: 0.07, gapSize: 0.09, transparent: true, opacity: 1 });
     const linha = new THREE.Line(geo, mat);
     linha.computeLineDistances();
     o.grupo.add(linha);
@@ -630,7 +631,7 @@ export function criarCena(host: HTMLElement, opcoes: { reduzir: boolean }): Cena
     orbitas.forEach((o, i) => {
       o.grupo.scale.setScalar(abre * (0.9 + 0.1 * e));
       aneis[i].rotation.y = t * 0.05 * Math.sign(o.velocidade);
-      (aneis[i].material as THREE.LineDashedMaterial).opacity = 0.9 * e;
+      (aneis[i].material as THREE.LineDashedMaterial).opacity = e;
     });
     pontos.forEach((p) => {
       const a = p.fase + t * p.velocidade;
